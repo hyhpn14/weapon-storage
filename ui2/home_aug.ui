@@ -1,0 +1,1248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1074</width>
+    <height>609</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Weapon Storage - Home 2</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background: qlineargradient(
+        x1: 0, y1: 0, x2: 1, y2: 1,
+        stop: 0 #0a1628,
+        stop: 0.4 #142240,
+        stop: 0.7 #1a2a4a,
+        stop: 1 #0d1f3c
+    );
+}
+
+QFrame#frame {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 30px;
+    border: none;
+}
+
+QFrame#frame_header {
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+QLabel#labelTitle {
+    color: #ffffff;
+    font-family: Plus Jakarta Sans;
+    font-size: 20px;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    letter-spacing: 2px;
+}
+
+QFrame#frame_stats {
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+QLabel { background: transparent; border: none; font-family: Inter; }
+QLabel#statTotal { color: rgba(255,255,255,0.80); font-size: 12px; font-weight: 600; }
+QLabel#statFilled { color: #10b981; font-size: 12px; font-weight: 600; }
+QLabel#statEmpty { color: #3b82f6; font-size: 12px; font-weight: 600; }
+QLabel#statAlert { color: #dc3545; font-size: 12px; font-weight: 600; }
+QLabel#statPercent { color: #f8d613; font-size: 12px; font-weight: 700; }
+QLabel#lbUser { color: #ffffff; font-size: 13px; font-weight: 600; }
+
+QFrame#frame_grid {
+    background: transparent;
+    border: none;
+}
+
+QPushButton#btRefresh {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.70);
+    font-family: Inter;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 20px;
+    min-height: 20px;
+}
+QPushButton#btRefresh:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+}
+
+QPushButton#btLogout {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}
+QPushButton#btLogout:hover {
+    background: rgba(255, 70, 70, 0.15);
+    border: 1px solid rgba(255, 70, 70, 0.30);
+}
+
+QFrame#frame_status {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0 0 30px 30px;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+QLabel#statusLabel {
+    color: #10b981;
+    font-family: Inter;
+    font-size: 12px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+}
+
+QLabel#labelVersion {
+    color: #f8d613;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 400;
+    background: transparent;
+    border: none;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-color: transparent;</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_main">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>35</number>
+    </property>
+    <property name="topMargin">
+     <number>35</number>
+    </property>
+    <property name="rightMargin">
+     <number>35</number>
+    </property>
+    <property name="bottomMargin">
+     <number>35</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_main_inner">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_header">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>65</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_header">
+          <property name="leftMargin">
+           <number>25</number>
+          </property>
+          <property name="rightMargin">
+           <number>25</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="labelTitle">
+            <property name="text">
+             <string>WEAPON STORAGE STATUS</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_header">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btRefresh">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../assets/icon/arrows-rotate-solid-full.svg</normaloff>../assets/icon/arrows-rotate-solid-full.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_user">
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_user">
+             <property name="spacing">
+              <number>8</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="labelUserIcon">
+               <property name="minimumSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="pixmap">
+                <pixmap>../assets/icon/user-regular-full.svg</pixmap>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lbUser">
+               <property name="text">
+                <string>ADMIN</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btLogout">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../assets/icon/arrow-right-from-bracket-solid-full.svg</normaloff>../assets/icon/arrow-right-from-bracket-solid-full.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_stats">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>45</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_stats">
+          <property name="leftMargin">
+           <number>25</number>
+          </property>
+          <property name="rightMargin">
+           <number>25</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="statTotal">
+            <property name="text">
+             <string>📦 Total : 10</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="statFilled">
+            <property name="text">
+             <string>🔒 Terisi : 0</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="statEmpty">
+            <property name="text">
+             <string>📥 Kosong : 10</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="statAlert">
+            <property name="text">
+             <string>⚠️ Alert : 0</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_stats">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="statPercent">
+            <property name="text">
+             <string>0% Terisi</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_grid">
+         <property name="styleSheet">
+          <string notr="true">background: transparent;</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_grid">
+          <property name="leftMargin">
+           <number>15</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>15</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_lockers">
+            <property name="horizontalSpacing">
+             <number>8</number>
+            </property>
+            <property name="verticalSpacing">
+             <number>7</number>
+            </property>
+            <item row="0" column="0" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelE1">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(16, 185, 129, 0.30); 
+border: 2px solid rgba(16, 185, 129, 0.30);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>A1-FULL</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelE2">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(16, 185, 129, 0.30); 
+border: 2px solid rgba(16, 185, 129, 0.30);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>FULL</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelE3">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(16, 185, 129, 0.30); 
+border: 2px solid rgba(255, 255, 255, 0.06);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>FULL</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelE4">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(16, 185, 129, 0.15);
+border: 2px solid rgba(16, 185, 129, 0.30);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>FULL</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="4" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelE5">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(248, 214, 19, 0.20);
+border: 2px solid rgba(248, 214, 19, 0.40);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>HALF</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="5" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelF1">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(220, 53, 69, 0.20);
+border: 2px solid rgba(220, 53, 69, 0.50);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>EMPTY</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="6" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelF2">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(220, 53, 69, 0.20);
+border: 2px solid rgba(220, 53, 69, 0.50);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>EMPTY</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="7" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelF3">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(220, 53, 69, 0.20);
+border: 2px solid rgba(220, 53, 69, 0.50);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>EMPTY</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="8" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelF4">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(220, 53, 69, 0.20);
+border: 2px solid rgba(220, 53, 69, 0.50);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>EMPTY</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="9" alignment="Qt::AlignHCenter">
+             <widget class="QLabel" name="labelF5">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>25</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color: rgba(255,255,255,0.60);
+font-size: 13px;
+font-weight: 600;
+font-family: Inter;
+background: rgba(248, 214, 19, 0.20);
+border: 2px solid rgba(248, 214, 19, 0.40);
+border-radius: 10px;</string>
+              </property>
+              <property name="text">
+               <string>HALF</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="btE1">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: white;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.30);
+}
+QPushButton:pressed {
+    background: rgba(16, 185, 129, 0.30);
+    border: 2px solid rgba(16, 185, 129, 0.50);
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/state/aug/lock/aug-full-lock.png</normaloff>../assets/state/aug/lock/aug-full-lock.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>80</width>
+                <height>340</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="btE2">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: white;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.30);
+}
+QPushButton:pressed {
+    background: rgba(16, 185, 129, 0.30);
+    border: 2px solid rgba(16, 185, 129, 0.50);
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/state/aug/lock/aug-full-lock.png</normaloff>../assets/state/aug/lock/aug-full-lock.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>80</width>
+                <height>340</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QPushButton" name="btE3">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: white;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.30);
+}
+QPushButton:pressed {
+    background: rgba(16, 185, 129, 0.30);
+    border: 2px solid rgba(16, 185, 129, 0.50);
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/state/aug/lock/aug-full-lock.png</normaloff>../assets/state/aug/lock/aug-full-lock.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>80</width>
+                <height>340</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QPushButton" name="btE4">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: white;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.30);
+}
+QPushButton:pressed {
+    background: rgba(16, 185, 129, 0.30);
+    border: 2px solid rgba(16, 185, 129, 0.50);
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/state/aug/lock/aug-full-lock.png</normaloff>../assets/state/aug/lock/aug-full-lock.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>80</width>
+                <height>340</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QPushButton" name="btE5">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: white;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background: rgba(248, 214, 19, 0.20);
+    border: 2px solid rgba(248, 214, 19, 0.40);
+}
+QPushButton:pressed {
+    background: rgba(248, 214, 19, 0.30);
+    border: 2px solid rgba(248, 214, 19, 0.60);
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/state/aug/lock/aug-half-lock.png</normaloff>../assets/state/aug/lock/aug-half-lock.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>80</width>
+                <height>340</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="5">
+             <widget class="QPushButton" name="btF1">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: white;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}
+QPushButton:pressed {
+    background: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/state/aug/lock/aug-empty-lock.png</normaloff>../assets/state/aug/lock/aug-empty-lock.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>80</width>
+                <height>340</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="6">
+             <widget class="QPushButton" name="btF2">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: white;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}
+QPushButton:pressed {
+    background: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/state/aug/aug-close-2.png</normaloff>../assets/state/aug/aug-close-2.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>87</width>
+                <height>340</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="7">
+             <widget class="QPushButton" name="btF3">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-empty-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+QPushButton:hover {
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}
+QPushButton:pressed {
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>80</width>
+                <height>300</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="8">
+             <widget class="QPushButton" name="btF4">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/aug-close.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+QPushButton:hover {
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}
+QPushButton:pressed {
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}</string>
+              </property>
+              <property name="text">
+               <string>F4</string>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="9">
+             <widget class="QPushButton" name="btF5">
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>340</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>110</width>
+                <height>400</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    color: white;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 600;
+}
+QPushButton:hover {
+    background: rgba(248, 214, 19, 0.20);
+    border: 2px solid rgba(248, 214, 19, 0.40);
+}
+QPushButton:pressed {
+    background: rgba(248, 214, 19, 0.30);
+    border: 2px solid rgba(248, 214, 19, 0.60);
+}</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../assets/state/aug/lock/aug-half-lock.png</normaloff>../assets/state/aug/lock/aug-half-lock.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>80</width>
+                <height>340</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_status">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>45</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_status">
+          <property name="leftMargin">
+           <number>25</number>
+          </property>
+          <property name="rightMargin">
+           <number>25</number>
+          </property>
+          <property name="bottomMargin">
+           <number>11</number>
+          </property>
+          <item alignment="Qt::AlignLeft">
+           <widget class="QLabel" name="statusLabel">
+            <property name="text">
+             <string>● System Active</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_status">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLabel" name="labelVersion">
+            <property name="text">
+             <string>V2.0.1</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

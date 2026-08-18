@@ -1,0 +1,216 @@
+import sys
+import json, os
+from PyQt5.QtWidgets import QApplication, QMainWindow, QStackedWidget, QDesktopWidget
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.uic import loadUi
+from utils import ClockHelper, center_on_screen, SystemStatusHelper
+from serial_handler import SerialHandler
+from screens import Saver, Login, Register, Home
+from db_config import get_db_connection
+from pulsing_widget import PulsingStatusBadge
+
+def load_gudang_config():
+    config_file = "config.json"
+    
+    # Cek apakah file config.json ada
+    if os.path.exists(config_file):
+        try:
+            with open(config_file, 'r') as f:
+                data = json.load(f)
+                # Ambil nilai "gudang", jika tidak ada gunakan default "GLOCK17"
+                return data.get("gudang", "GLOCK17")
+        except Exception as e:
+            print(f"⚠️ Gagal membaca config.json: {e}")
+            
+    # Nilai default jika file json tidak ditemukan / error
+    return "GLOCK17"
+
+# Ambil konfigurasi gudang yang aktif
+GUDANG = load_gudang_config()
+print(f"Storage Mode Aktif: [{GUDANG}]")
+
+class MainApp(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setFixedSize(1024, 600)
+
+        if hasattr(self, 'titlebar'):
+            self.titlebar.mousePressEvent = self.mousePressEvent
+            self.titlebar.mouseMoveEvent = self.mouseMoveEvent
+
+        self.oldPos = QPoint()
+
+        self.stack = QStackedWidget()
+        self.setCentralWidget(self.stack)
+
+        self.clock_helper = ClockHelper()
+        self.status_helper = SystemStatusHelper()
+        self.history = []
+
+        # SATU SerialHandler untuk seluruh aplikasi (finger, RFID, locker - 1 Arduino yang sama)
+        self.serial_handler = SerialHandler()
+        self.serial_handler.start()
+
+        self.sizes = {
+            "saver": (1024, 600),
+            "login": (1024, 600),
+            "register": (1024, 600),
+            "home": (1024, 600),
+            # "home2": (1024, 600),
+        }
+
+        self.screens = {
+            "saver": Saver(self.clock_helper),
+            "login": Login(self.clock_helper, serial_handler=self.serial_handler, gudang=GUDANG),
+            "register": Register(self.clock_helper, serial_handler=self.serial_handler, gudang=GUDANG),
+            "home": Home(serial_handler=self.serial_handler, gudang=GUDANG),
+            # "home2": Home2(serial_handler=self.serial_handler, gudang=GUDANG),
+        }
+
+        for widget in self.screens.values():
+            self.stack.addWidget(widget)
+
+        # 4. INJEKSI BADGE STATUS DAN HUBUGKAN KE STATUS_HELPER SINKRON
+        self.attach_and_connect_status_badges()
+
+        # 5. TIMER CHECK HEALTH BERKALA (PASIF / RAM ONLY)
+        self.health_timer = QTimer(self)
+        self.health_timer.timeout.connect(self.check_system_health)
+        self.health_timer.start(3000) # Jalankan pengecekan tiap 3 detik
+        
+        # Jalankan sekali saat startup
+        QTimer.singleShot(500, self.check_system_health)
+
+        # Navigasi (Sinyal -> Fungsi)
+        self.screens["saver"].go_to_login.connect(lambda: self.navigate_to("login"))
+        self.screens["login"].btCls_login.clicked.connect(lambda: self.navigate_to("saver"))
+
+        self.screens["register"].go_back.connect(lambda: self.navigate_to("login"))
+        self.screens["login"].btRegis.clicked.connect(lambda: self.navigate_to("register"))
+
+        # Login sukses -> bawa nrp & nama, teruskan ke Home/Home2, baru pindah layar
+        self.screens["login"].login_success.connect(self.handle_login_success)
+
+        # Home Navigation
+        # self.screens["home"].go_to_home2.connect(lambda: self.navigate_to("home2"))
+        # self.screens["home2"].go_to_home.connect(lambda: self.navigate_to("home"))
+
+        # Logout
+        self.screens["home"].logout_signal.connect(self.reset_system)
+        # self.screens["home2"].logout_signal.connect(self.reset_system)
+
+        center_on_screen(self)
+
+    def attach_and_connect_status_badges(self):
+        """Memasang PulsingStatusBadge di tiap layar dan menyambungkannya ke status_helper"""
+        for name, screen in self.screens.items():
+            if hasattr(screen, 'statusLabel'):
+                screen.statusLabel.hide()
+                
+                # Buat badge independen khusus layar tersebut
+                badge = PulsingStatusBadge(
+                    parent=screen.frame_status if hasattr(screen, 'frame_status') else screen
+                )
+                
+                # Masukkan ke layout status di UI
+                if hasattr(screen, 'horizontalLayout_status'):
+                    screen.horizontalLayout_status.insertWidget(0, badge)
+                elif hasattr(screen, 'layoutStatus'):
+                    screen.layoutStatus.insertWidget(0, badge)
+
+                # Sambungkan sinyal status_helper langsung ke method set_status milik badge layar tersebut!
+                self.status_helper.status_changed.connect(badge.set_status)
+
+    def check_system_health(self):
+        """Pengecekan Kesehatan DB dan Status Flag Serial (Sangat Ringan)"""
+        db_ok = True
+        controller_ok = True
+
+        # 1. Cek DB Koneksi ringan
+        try:
+            conn = get_db_connection()
+            if conn and conn.is_connected():
+                conn.close()
+            else:
+                db_ok = False
+        except Exception:
+            db_ok = False
+
+        # 2. Cek Serial Handler (Cukup cek variable flag, TANPA mengirim data ke port serial)
+        if hasattr(self.serial_handler, 'is_connected'):
+            controller_ok = self.serial_handler.is_connected
+        else:
+            # Fallback jika properti is_connected belum ada
+            controller_ok = self.serial_handler.isRunning()
+
+        # 3. Broadcast status terbaru via helper terpusat
+        self.status_helper.update_status(db_connected=db_ok, controller_connected=controller_ok)
+        
+    def handle_login_success(self, nrp, nama):
+        self.screens["home"].set_user(nrp, nama)
+        # self.screens["home2"].set_user(nrp, nama)
+        self.navigate_to("home")
+
+    def navigate_to(self, page_name):
+        self.history.append(self.stack.currentIndex())
+        index = list(self.screens.keys()).index(page_name)
+        self.stack.setCurrentIndex(index)
+
+        if page_name in self.sizes:
+            width, height = self.sizes[page_name]
+            self.setFixedSize(width, height)
+            center_on_screen(self)
+
+    def closeEvent(self, event):
+        self.serial_handler.stop()
+        event.accept()
+
+    def reset_system(self):
+        print("Sistem di-reset...")
+        self.force_lock_all_lockers()
+
+        # Bersihkan info user yang login
+        self.screens["home"].set_user(None, None)
+        # self.screens["home2"].set_user(None, None)
+
+        self.stack.setCurrentIndex(0)
+
+        for name, screen in self.screens.items():
+            if hasattr(screen, 'stop_scanning'):
+                print(f"Menghentikan proses pada layar: {name}")
+                screen.stop_scanning()
+
+            if hasattr(screen, 'load_data_from_db'):
+                screen.load_data_from_db()
+
+    def force_lock_all_lockers(self):
+        """Memaksa semua loker kembali ke kondisi terkunci di database"""
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("UPDATE tb_data SET relay = 0")   # 0 = lock (sesuai mapping yang sudah dikoreksi)
+            conn.commit()
+            cursor.close()
+            conn.close()
+            print("Semua relay di-reset ke Lock (0).")
+        except Exception as e:
+            print(f"Gagal reset relay: {e}")
+
+    def mousePressEvent(self, event):
+        self.oldPos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        delta = QPoint(event.globalPos() - self.oldPos)
+        self.move(self.x() + delta.x(), self.y() + delta.y())
+        self.oldPos = event.globalPos()
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainApp()
+    window.show()
+    sys.exit(app.exec_())

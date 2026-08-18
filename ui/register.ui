@@ -1,0 +1,897 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background: qlineargradient(
+        x1: 0, y1: 0, x2: 1, y2: 1,
+        stop: 0 #0a1628,
+        stop: 0.4 #142240,
+        stop: 0.7 #1a2a4a,
+        stop: 1 #0d1f3c
+    );
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_6">
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border : 1px solid;
+border-color: rgb(255, 255, 255);
+</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <item>
+           <widget class="QFrame" name="frame_8">
+            <property name="styleSheet">
+             <string notr="true">border: none</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <property name="spacing">
+              <number>5</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item alignment="Qt::AlignLeft">
+              <widget class="QPushButton" name="pushButton">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../assets/icon/gears-solid-full.svg</normaloff>../assets/icon/gears-solid-full.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignHCenter">
+              <widget class="QLabel" name="label_5">
+               <property name="font">
+                <font>
+                 <family>Poppins</family>
+                 <pointsize>20</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: rgb(255, 255, 255);
+border :none</string>
+               </property>
+               <property name="text">
+                <string>REGISTER SCREEN</string>
+               </property>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignRight">
+              <widget class="QPushButton" name="btCls_regis">
+               <property name="minimumSize">
+                <size>
+                 <width>50</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton{	
+	color: rgb(42, 41, 41);
+	border-radius : 5px;
+}
+
+QPushButton:hover{	
+	
+	color: rgb(42, 41, 41);
+	background-color: rgb(255, 0, 0);
+}
+QToolTip {	
+	color: rgb(15, 15, 15);
+}
+border :none</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../assets/x.png</normaloff>../assets/x.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>25</width>
+                 <height>25</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_3">
+         <property name="styleSheet">
+          <string notr="true">border : 1px solid;
+border-color: rgb(255, 255, 255);
+</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QFrame" name="frame_4">
+            <property name="styleSheet">
+             <string notr="true">border :none</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_9">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="frame_5">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_5">
+                <item>
+                 <widget class="QFrame" name="frame_9">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_12">
+                   <item>
+                    <widget class="QLabel" name="label">
+                     <property name="font">
+                      <font>
+                       <family>Poppins Medium</family>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(255, 255, 255);</string>
+                     </property>
+                     <property name="text">
+                      <string>STATUS : </string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="cbState">
+                     <property name="minimumSize">
+                      <size>
+                       <width>430</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Poppins</family>
+                       <pointsize>-1</pointsize>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QComboBox {
+     background-color: #0d1226; /* Sedikit lebih gelap dari background utama */
+    border: 2px solid #3d4a7d; /* Border dasar */
+    border-radius: 8px;
+    padding: 10px;
+    color: #ffffff;
+    font-family: 'Poppins';
+    font-size: 14px;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 30px;
+}
+
+/* Mengganti ikon panah agar sesuai warna */
+QComboBox::down-arrow {
+    image: url(C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/down.png); /* Siapkan file ikon panah putih kecil */
+    width: 15px;
+    height: 15px;
+}
+/* Mengatur tampilan menu dropdown saat diklik */
+QComboBox QAbstractItemView {
+	background-color: #171835;
+    color: white;
+    selection-background-color: #FFF701; /* Warna kuning khas tombol Anda */
+    selection-color: black;
+    border: 1px solid #555555;
+    outline: none;
+}
+
+</string>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>USER</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>OPERATOR</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frame_13">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_4">
+                   <property name="leftMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_4">
+                     <property name="font">
+                      <font>
+                       <family>Poppins</family>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(255, 255, 255);</string>
+                     </property>
+                     <property name="text">
+                      <string>NAMA :</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lbName">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QLineEdit {
+    background-color: #0d1226; /* Sedikit lebih gelap dari background utama */
+    border: 2px solid #3d4a7d; /* Border dasar */
+    border-radius: 8px;
+    padding: 10px;
+    color: #ffffff;
+    font-family: 'Poppins';
+    font-size: 14px;
+}
+
+/* Efek saat diklik/fokus */
+QLineEdit:focus {
+    border: 2px solid #FFF701; /* Garis kuning khas sistem Anda */
+    background-color: #172147;
+}
+
+/* Jika Anda ingin menambahkan placeholder text yang cantik */
+QLineEdit::placeholder {
+    color: #556688;
+}</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frame_6">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_8">
+                <item>
+                 <widget class="QFrame" name="frame_11">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_5">
+                   <property name="spacing">
+                    <number>7</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_2">
+                     <property name="font">
+                      <font>
+                       <family>Poppins Medium</family>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(255, 255, 255);</string>
+                     </property>
+                     <property name="text">
+                      <string> NRP :</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lbNRP">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>430</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QLineEdit {
+    background-color: #0d1226; /* Sedikit lebih gelap dari background utama */
+    border: 2px solid #3d4a7d; /* Border dasar */
+    border-radius: 8px;
+    padding: 10px;
+    color: #ffffff;
+    font-family: 'Poppins';
+    font-size: 14px;
+}
+
+/* Efek saat diklik/fokus */
+QLineEdit:focus {
+    border: 2px solid #FFF701; /* Garis kuning khas sistem Anda */
+    background-color: #172147;
+}
+
+/* Jika Anda ingin menambahkan placeholder text yang cantik */
+QLineEdit::placeholder {
+    color: #556688;
+}</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frame_12">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_6">
+                   <property name="spacing">
+                    <number>7</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>10</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>10</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label_3">
+                     <property name="font">
+                      <font>
+                       <family>Poppins Medium</family>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(255, 255, 255);</string>
+                     </property>
+                     <property name="text">
+                      <string>PANGKAT :</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="lbTitle">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>430</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QLineEdit {
+    background-color: #0d1226; /* Sedikit lebih gelap dari background utama */
+    border: 2px solid #3d4a7d; /* Border dasar */
+    border-radius: 8px;
+    padding: 10px;
+    color: #ffffff;
+    font-family: 'Poppins';
+    font-size: 14px;
+}
+
+/* Efek saat diklik/fokus */
+QLineEdit:focus {
+    border: 2px solid #FFF701; /* Garis kuning khas sistem Anda */
+    background-color: #172147;
+}
+
+/* Jika Anda ingin menambahkan placeholder text yang cantik */
+QLineEdit::placeholder {
+    color: #556688;
+}</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frame_7">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <property name="spacing">
+                 <number>20</number>
+                </property>
+                <property name="rightMargin">
+                 <number>11</number>
+                </property>
+                <item>
+                 <widget class="QFrame" name="frame_14">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>11</number>
+                   </property>
+                   <item>
+                    <widget class="QPushButton" name="btRSFinger">
+                     <property name="styleSheet">
+                      <string notr="true">/* Style Dasar (Saat Tidak Dipilih) */
+QPushButton {
+    background-color: #172147; /* Warna gelap */
+    color: #556688; /* Warna teks abu-abu */
+    border: 2px solid #3d4a7d;
+    border-radius: 15px;
+    font-family: 'Orbitron';
+	font-size : 15px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+/* Style Saat Dipilih/Aktif */
+QPushButton:checked {
+    background-color: #FFF701; /* Kuning utama */
+    color: #171835; /* Teks gelap */
+    border: 2px solid #FFF701;
+}
+
+/* Efek Hover */
+QPushButton:hover {
+    border: 2px solid #FFF701;
+    color: white;
+}</string>
+                     </property>
+                     <property name="text">
+                      <string>SCAN FINGER</string>
+                     </property>
+                     <property name="icon">
+                      <iconset>
+                       <normaloff>../assets/finger.png</normaloff>../assets/finger.png</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>80</width>
+                       <height>80</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frame_15">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_2">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QPushButton" name="btRSId">
+                     <property name="styleSheet">
+                      <string notr="true">/* Style Dasar (Saat Tidak Dipilih) */
+QPushButton {
+    background-color: #172147; /* Warna gelap */
+    color: #556688; /* Warna teks abu-abu */
+    border: 2px solid #3d4a7d;
+    border-radius: 15px;
+    font-family: 'Orbitron';
+    font-weight: bold;
+font-size : 15px;
+    padding: 10px;
+}
+
+/* Style Saat Dipilih/Aktif */
+QPushButton:checked {
+    background-color: #FFF701; /* Kuning utama */
+    color: #171835; /* Teks gelap */
+    border: 2px solid #FFF701;
+}
+
+/* Efek Hover */
+QPushButton:hover {
+    border: 2px solid #FFF701;
+    color: white;
+}border :none;</string>
+                     </property>
+                     <property name="text">
+                      <string>SCAN ID</string>
+                     </property>
+                     <property name="icon">
+                      <iconset>
+                       <normaloff>../assets/rfid.png</normaloff>../assets/rfid.png</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>80</width>
+                       <height>80</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frame_16">
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_3">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QPushButton" name="btRSPin">
+                     <property name="styleSheet">
+                      <string notr="true">/* Style Dasar (Saat Tidak Dipilih) */
+QPushButton {
+    background-color: #172147; /* Warna gelap */
+    color: #556688; /* Warna teks abu-abu */
+    border: 2px solid #3d4a7d;
+    border-radius: 15px;
+    font-family: 'Orbitron';
+	font-size : 15px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+/* Style Saat Dipilih/Aktif */
+QPushButton:checked {
+    background-color: #FFF701; /* Kuning utama */
+    color: #171835; /* Teks gelap */
+    border: 2px solid #FFF701;
+}
+
+/* Efek Hover */
+QPushButton:hover {
+    border: 2px solid #FFF701;
+    color: white;
+}</string>
+                     </property>
+                     <property name="text">
+                      <string>CREATE 
+PASSCODE</string>
+                     </property>
+                     <property name="icon">
+                      <iconset>
+                       <normaloff>../assets/pin.png</normaloff>../assets/pin.png</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>80</width>
+                       <height>80</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frame_20">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QPushButton" name="btConfirm">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Poppins</family>
+                    <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    background-color: rgb(255, 247, 1);
+    color: rgb(23, 24, 53);
+	padding :5px;
+    border-radius: 10px;
+    font-family: 'Poppins';
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: rgb(220, 212, 0); /* Lebih gelap sedikit saat hover */
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: rgb(180, 170, 0);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>ACCESS CONFIRM</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="btClose">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>200</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Poppins</family>
+                    <pointsize>10</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    border: 1px solid white;
+    border-radius: 10px;
+    background-color: rgb(98, 97, 95);
+    color: white;
+	padding :5px;
+    font-family: 'Poppins';
+	font-weight : bold;
+}
+
+QPushButton:hover {
+    background-color: rgb(120, 119, 117);
+    border: 1px solid rgb(255, 247, 1); /* Border berubah jadi kuning saat hover */
+}
+
+QPushButton:pressed {
+    background-color: rgb(70, 70, 70);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>CLOSE</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

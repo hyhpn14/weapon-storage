@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">   &lt;string notr=&quot;true&quot;&gt;
+   /* ============================================================ */
+/* GLASS THEME - SIGNALPRO GUN STORAGE SYSTEM                    */
+/* ============================================================ */
+
+/* Main Window - Dark Gradient Background */
+QMainWindow {
+    background: qlineargradient(
+        x1: 0, y1: 0, x2: 1, y2: 1,
+        stop: 0 #0a1628,
+        stop: 0.4 #142240,
+        stop: 0.7 #1a2a4a,
+        stop: 1 #0d1f3c
+    );
+}
+
+/* ============================================================ */
+/* GLASS CARD - FRAME UTAMA                                      */
+/* ============================================================ */
+QFrame#frame {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+/* ============================================================ */
+/* FRAME TIME - JAM                                              */
+/* ============================================================ */
+QFrame#frame_3 {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 24px 24px 0 0;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Label Jam */
+QLabel#lbTime {
+    font-family: 'Orbitron';
+    font-size: 90px;
+    font-weight: 700;
+    color: #ffffff;
+    background: transparent;
+    border: none;
+    text-shadow: 0 0 30px rgba(74, 124, 247, 0.3);
+    letter-spacing: 4px;
+}
+
+/* ============================================================ */
+/* FRAME BOTTOM - LOGO &amp; DATE                                    */
+/* ============================================================ */
+QFrame#frame_5 {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 0 0 24px 24px;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Logo Label */
+QLabel#label {
+    background: transparent;
+    border: none;
+}
+
+/* Date Label */
+QLabel#lbDate {
+    font-family: 'Outfit';
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.7);
+    background: transparent;
+    border: none;
+    letter-spacing: 1px;
+}
+
+/* ============================================================ */
+/* FRAME 2 - TOMBOL ENTER                                        */
+/* ============================================================ */
+QFrame#frame_2 {
+    background: transparent;
+    border: none;
+}
+
+/* Tombol Enter - Glass Style */
+QPushButton#btDown {
+    background: qlineargradient(
+        x1: 0, y1: 0, x2: 1, y2: 1,
+        stop: 0 rgba(74, 124, 247, 0.25),
+        stop: 1 rgba(108, 92, 231, 0.15)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    qproperty-iconSize: 48px 48px;
+}
+
+QPushButton#btDown:hover {
+    background: qlineargradient(
+        x1: 0, y1: 0, x2: 1, y2: 1,
+        stop: 0 rgba(74, 124, 247, 0.40),
+        stop: 1 rgba(108, 92, 231, 0.25)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.30);
+}
+
+QPushButton#btDown:pressed {
+    background: qlineargradient(
+        x1: 0, y1: 0, x2: 1, y2: 1,
+        stop: 0 rgba(74, 124, 247, 0.10),
+        stop: 1 rgba(108, 92, 231, 0.05)
+    );
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================================ */
+/* SCROLLBAR (Jika Ada)                                          */
+/* ============================================================ */
+
+QScrollBar:vertical {
+    background: rgba(255, 255, 255, 0.03);
+    border: none;
+    border-radius: 8px;
+    width: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}&lt;/string&gt;</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(17, 24, 53);</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item alignment="Qt::AlignHCenter|Qt::AlignBottom">
+     <widget class="QFrame" name="frame">
+      <property name="minimumSize">
+       <size>
+        <width>650</width>
+        <height>260</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>650</width>
+        <height>260</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_3">
+         <property name="styleSheet">
+          <string notr="true">border :2px solid;
+border-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="lbTime">
+            <property name="font">
+             <font>
+              <family>Orbitron</family>
+              <pointsize>90</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 247, 1);
+border : none;</string>
+            </property>
+            <property name="text">
+             <string>00:00</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_5">
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(46, 50, 69);
+border : 2px solid;
+border-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item alignment="Qt::AlignLeft">
+           <widget class="QLabel" name="label">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>55</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border : none;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap>../assets/Gun-Storage.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lbDate">
+            <property name="font">
+             <font>
+              <family>Orbitron</family>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 255, 255);
+border : none;</string>
+            </property>
+            <property name="text">
+             <string>Friday, 26 June 2026</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_2">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>150</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QPushButton" name="btDown">
+         <property name="minimumSize">
+          <size>
+           <width>80</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>80</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton{
+	border: none;
+	qproperty-iconSize: 80px 80px;
+}
+QPushButton:hover{
+	color: rgb(98, 91, 41);
+}
+</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../assets/down.png</normaloff>../assets/down.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>80</width>
+           <height>80</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
