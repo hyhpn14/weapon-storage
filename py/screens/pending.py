@@ -5,6 +5,7 @@ from db_config import get_db_connection
 from .custom_dialog import CustomMessageBox
 from .admin_pin import AdminPinDialog  # Import Custom PIN Dialog kita
 from camera import start_unauthorized_capture, start_access_capture
+from log_client import send_log
 
 class PendingDialog(QDialog):
     def __init__(self, parent=None, gudang="GLOCK17"):
@@ -55,10 +56,32 @@ class PendingDialog(QDialog):
         if self.verify_super_admin_pin(pin):
             self.approved_data = row_data
             start_access_capture(self, reason="success_acc_enroll", save_dir=f"captures/{self.gudang}")  
+            send_log(
+                kategori="user_auth",
+                aktivitas="user_approval",
+                detail=f"User approval successful for NRP {row_data.get('nrp')}",
+                locker_id=row_data.get('id_locker'),
+                nrp=row_data.get('nrp'),
+                nama=row_data.get('nama'),
+                gudang=self.gudang,
+                metode="pin",
+                status="success"
+            )
             CustomMessageBox.show_info(self, "Berhasil", f"Data enroll untuk NRP {row_data.get('nrp')} ({row_data.get('nama')}) berhasil di-ACC!")
             self.accept()
         else:
             start_unauthorized_capture(self, reason="failed_acc_enroll", save_dir=f"captures/{self.gudang}")
+            send_log(
+                kategori="user_auth",
+                aktivitas="user_approval",
+                detail=f"User approval failed for NRP {row_data.get('nrp')}",
+                locker_id=row_data.get('id_locker'),
+                nrp=row_data.get('nrp'),
+                nama=row_data.get('nama'),
+                gudang=self.gudang,
+                metode="pin",
+                status="danger"
+            )
             CustomMessageBox.show_warning(self, "Akses Ditolak","PIN Super Admin salah! Akses ditolak." )
 
     def verify_super_admin_pin(self, input_pin):

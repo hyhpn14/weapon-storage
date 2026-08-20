@@ -3,6 +3,7 @@ import re
 import serial
 import serial.tools.list_ports
 from PyQt5.QtCore import QThread, QTimer, pyqtSignal
+from log_client import send_log
 
 # Saklar debug: set True kalau butuh lihat lagi data mentah tiap baris
 # yang masuk dari Arduino (berguna saat troubleshooting hardware).
@@ -40,6 +41,15 @@ class SingleArduinoThread(QThread):
             self.role = line.split('IDENTITY:', 1)[1].strip()
             print(f"[Serial] Port {self.port} teridentifikasi via Handshake sebagai: {self.role}")
             self.connection_changed.emit(self.role, True)
+
+            # --- RECORD LOG: HANDSHAKE SUCCESS ---
+            send_log(
+                kategori="Sensor",
+                aktivitas="serial_connected",
+                detail=f"Arduino Port {self.port} berhasil Handshake sebagai [{self.role}]",
+                metode="HANDSHAKE",
+                status="success"
+            )
             return
 
         # 2. Auto-Recovery: Identifikasi dari payload jika Handshake terlewat
@@ -48,10 +58,27 @@ class SingleArduinoThread(QThread):
                 self.role = 'MAIN_CONTROLLER'
                 print(f"[Serial] Auto-assign Port {self.port} sebagai: MAIN_CONTROLLER")
                 self.connection_changed.emit(self.role, True)
+                # --- RECORD LOG: AUTO ASSIGN ---
+                send_log(
+                    kategori="Sensor",
+                    aktivitas="serial_auto_assigned",
+                    detail=f"Port {self.port} auto-assigned sebagai MAIN_CONTROLLER",
+                    metode="PAYLOAD",
+                    status="warning"
+                )
             elif 'C1,' in line or 'D1,' in line:
                 self.role = 'LOCKER_EXPANSION'
                 print(f"[Serial] Auto-assign Port {self.port} sebagai: LOCKER_EXPANSION")
                 self.connection_changed.emit(self.role, True)
+
+                # --- RECORD LOG: AUTO ASSIGN ---
+                send_log(
+                    kategori="Sensor",
+                    aktivitas="serial_auto_assigned",
+                    detail=f"Port {self.port} auto-assigned sebagai LOCKER_EXPANSION",
+                    metode="PAYLOAD",
+                    status="warning"
+                )
 
         # 3. Handling Khusus Response RFID dari Arduino
         if line.startswith("RFID:"):
@@ -72,6 +99,16 @@ class SingleArduinoThread(QThread):
             tag, value = line.split(':', 1)
             tag = tag.strip()
             value = value.strip()
+
+            # Record jika Arduino melempar tag ERROR/ALERT khusus
+            if tag in ["ERROR", "FAULT", "ALERT"]:
+                send_log(
+                    kategori="Sensor",
+                    aktivitas="serial_error",
+                    detail=f"Alert dari [{self.role}]: {value}",
+                    status="danger"
+                )
+
         elif re.match(r'^[A-D]\d,', line):
             # Data locker dari Arduino TIDAK punya prefix "TAG:", cuma CSV
             # mentah seperti "A1,C,00,0,B1,A,17,1,0,...". Tanpa deteksi ini,
@@ -131,6 +168,14 @@ class SingleArduinoThread(QThread):
                 self.is_connected = False
                 if was_role != 'UNKNOWN':
                     self.connection_changed.emit(was_role, False)
+
+                # --- RECORD LOG: SERIAL DISCONNECTED ---
+                send_log(
+                    kategori="sensor",
+                    aktivitas="serial_error",
+                    detail=f"Koneksi Serial [{was_role}] di Port {self.port} terputus: {e}",
+                    status="danger"
+                )
 
                 self.cleanup()
                 time.sleep(1)
@@ -264,6 +309,7 @@ class SerialHandler:
                 t.send_command(command, data)
                 return True
         print(f'[SerialManager] Perangkat {target_role} tidak ditemukan/offline.')
+       
         return False
 
     def stop(self):

@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon
 from PyQt5.uic import loadUi
 from utils import LockerButton
+from log_client import send_log
 
 # ============================================================
 # PROFIL PER-DEVICE
@@ -301,6 +302,17 @@ class Home(QMainWindow):
             btn.is_unlocking_grace = True
             QTimer.singleShot(5000, lambda b=btn: self.end_unlock_pulse(b))
 
+            send_log(
+                kategori="LOCKER",
+                aktivitas="locker_open",
+                detail=f"Locker {btn.locker_id} opened",
+                locker_id=btn.locker_id,
+                nrp=self.current_nrp,
+                nama=self.current_nama,
+                gudang=self.gudang,
+                metode="manual"
+            )
+
             # btn.play_gif("assets/state/open.gif", duration_ms=0)
             btn.play_open_gif(duration_ms=0)
 
@@ -317,6 +329,18 @@ class Home(QMainWindow):
                 if target_btn.is_open_pending:
                     print(f"⚠️ Warning 10 Detik: Loker {target_btn.locker_id} belum ditutup!")
                     target_btn.play_close_gif(  duration_ms=0, bg_color="#991B1B", border_color="#EF4444",  )
+
+                    send_log(
+                        kategori="LOCKER",
+                        aktivitas="locker_warning",
+                        detail=f"Locker {target_btn.locker_id} warning: not closed within 10 seconds",
+                        locker_id=target_btn.locker_id,
+                        nrp=self.current_nrp,
+                        nama=self.current_nama,
+                        gudang=self.gudang,
+                        metode="manual"
+                    )
+                    
                     if self.serial:
                         role = self.get_role_for_locker(target_btn.locker_id)
                         module_id = self.get_module_id(target_btn.locker_id)
@@ -510,5 +534,15 @@ class Home(QMainWindow):
             return
 
         print("Logout berhasil...")
+        send_log(
+            kategori="user_auth",
+            aktivitas="system_shutdown",
+            detail=f"User {self.current_nrp} ({self.current_nama}) logged out",
+            locker_id=None,
+            nrp=self.current_nrp,
+            nama=self.current_nama,
+            gudang=self.gudang,
+            metode="manual"
+        )
         self.serial.send_command_to("MAIN_CONTROLLER", "beeptrue")
         self.logout_signal.emit()

@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
 from camera import start_access_capture
 from serial_handler import SerialHandler
+from log_client import send_log
 
 
 # --- CLASS AUTH FINGER ---
@@ -51,7 +52,7 @@ class AuthFinger(QDialog):
       self.lbInfoF.setText("Fingerprint not recognized")
       self.lbInfoF.setStyleSheet("color: red;")
       log_login_attempt("Unknown", "finger", 0, self.gudang, self.user_id_locker)
-
+      
       # Tandai gagal dan tutup dialog untuk diproses oleh Login
       self.was_failed = True
       self.stop_scanning()
@@ -95,6 +96,17 @@ class AuthFinger(QDialog):
             reason="success_fingerprint",
             save_dir=f"captures/{self.gudang}",
         )
+        send_log(
+            kategori="user_auth",
+            aktivitas="finger_login",            
+            detail=f"User {self.user_nrp} ({self.user_nama}) berhasil login via Fingerprint.",
+            locker_id=self.user_id_locker,
+            nrp=self.user_nrp,
+            nama=self.user_nama,
+            gudang=self.gudang,
+            metode="fingerprint",
+            status="success"
+        )
         self.stop_scanning()
         log_login_attempt(
             self.user_nrp, "finger", 1, self.gudang, self.user_id_locker
@@ -103,6 +115,17 @@ class AuthFinger(QDialog):
       else:
         self.lbInfoF.setText("Fingerprint not registered")
         self.lbInfoF.setStyleSheet("color: red;")
+        send_log(
+            kategori="user_auth",
+            aktivitas="finger_login_failed",
+            detail="Percobaan login fingerprint gagal.",
+            locker_id=self.user_id_locker,
+            nrp="Unknown",
+            nama="Device",
+            gudang=self.gudang,
+            metode="fingerprint",
+            status="failed"
+        )
         log_login_attempt("Unknown", "finger", 0, self.gudang, self.user_id_locker)
 
         # Tandai gagal dan tutup dialog
@@ -233,14 +256,37 @@ class AuthRFID(QDialog):
             self.user_nrp, "rfid", 1, self.gudang, self.user_id_locker
         )
         self.serial.send_command_to("MAIN_CONTROLLER", "beeptrue")
+        send_log(
+            kategori="user_auth",
+            aktivitas="rfid_login",
+            detail=f"User {self.user_nrp} ({self.user_nama}) berhasil login via RFID.",
+            locker_id=self.user_id_locker,
+            nrp=self.user_nrp,
+            nama=self.user_nama,
+            gudang=self.gudang,
+            metode="rfid",
+            status="success"
+        )
         start_access_capture(
             self, reason="success_rfid", save_dir=f"captures/{self.gudang}"
         )
+
         self.stop_scanning()
         QTimer.singleShot(2000, self.accept)
       else:
         self.lbInfoR.setText("ID Card not registered")
         self.serial.send_command_to("MAIN_CONTROLLER", "beepfail")
+        send_log(
+            kategori="user_auth",
+            aktivitas="rfid_login_failed",
+            detail=f"Percobaan login RFID gagal.",
+            locker_id=self.user_id_locker,
+            nrp="Unknown",
+            nama="Unknown",
+            gudang=self.gudang,
+            metode="rfid",
+            status="failed"
+        )
         self.lbInfoR.setStyleSheet("color: red;")
         log_login_attempt("Unknown", "rfid", 0, self.gudang, self.user_id_locker)
 
@@ -322,7 +368,17 @@ class AuthPin(QDialog):
 
         if self.serial:
           self.serial.send_command_to("MAIN_CONTROLLER", "beeptrue")
-
+        send_log(
+            kategori="user_auth",
+            aktivitas="pin_login",
+            detail=f"User {self.user_nrp} ({self.user_nama}) berhasil login via PIN.",
+            locker_id=self.user_id_locker,
+            nrp=self.user_nrp,
+            nama=self.user_nama,
+            gudang=self.gudang,
+            metode="pin",
+            status="success"
+        )
         self.lbInfoP.setText(f"Welcome {self.user_nama}!")
         self.lbInfoP.setStyleSheet("color: green;")
 
@@ -338,7 +394,17 @@ class AuthPin(QDialog):
       else:
         if self.serial:
           self.serial.send_command_to("MAIN_CONTROLLER", "beepfail")
-
+        send_log(
+            kategori="user_auth",
+            aktivitas="pin_login_failed",
+            detail=f"Percobaan login PIN gagal.",
+            locker_id=self.user_id_locker,
+            nrp="Unknown",
+            nama="Unknown",
+            gudang=self.gudang,
+            metode="pin",
+            status="failed"
+        )
         log_login_attempt(
             "Unknown", "pin", 0, self.gudang, self.user_id_locker
         )

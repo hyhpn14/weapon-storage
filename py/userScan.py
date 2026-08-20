@@ -4,6 +4,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
 from serial_handler import SerialHandler
+from log_client import send_log
+from db_config import get_db_connection
 
 # Mapping keyword dari Arduino -> teks UI yang rapi
 FINGER_STATUS_MAP = {
@@ -19,11 +21,12 @@ FINGER_STATUS_MAP = {
 # --- CLASS SCAN FINGER ---
 class ScanFinger(QDialog):
 
-  def __init__(self, nrp, serial_handler=None, finger_id=None):
+  def __init__(self, nrp, serial_handler=None, finger_id=None, gudang="GLOCK17"):
     super().__init__()
     loadUi("ui2/dialogs/enroll_finger.ui", self)
     self.setWindowModality(Qt.ApplicationModal)
     self.setWindowFlags(Qt.FramelessWindowHint)
+
 
     self.nrp = nrp
     self.target_id = finger_id
@@ -31,6 +34,7 @@ class ScanFinger(QDialog):
     self.enroll_success = False
 
     self.serial = serial_handler
+    self.gudang = gudang
 
     if hasattr(self, "lbNrpRF"):
       self.lbNrpRF.setText(f"{nrp}")
@@ -78,6 +82,16 @@ class ScanFinger(QDialog):
           self.stop_animation()
           self.lbIconF.setStyleSheet(
               "background-color: #28a745; border-radius: 50px;"
+          )
+          send_log(
+              kategori="user_auth",
+              aktivitas="finger_enroll",
+              detail="Fingerprint enrollment successful",
+              locker_id=self.target_id,
+              nrp=self.nrp,
+              nama="Device",
+              gudang=self.gudang,
+              metode="fingerprint"
           )
         return
 
@@ -154,9 +168,60 @@ class ScanRfid(QDialog):
       uid = value.strip().replace(" ", "")
       self.process_rfid_input(uid)
 
+  def is_rfid_registered(self, uid):
+    """Mengecek apakah UID RFID sudah terdaftar pada kolom 'uid' di tb_users."""
+    conn = get_db_connection()
+    if conn is None:
+      print("Warning: Gagal terhubung ke database untuk mengecek RFID")
+      return False, None
+
+    try:
+      cursor = conn.cursor()
+      # Menggunakan kolom 'uid' sesuai query UPDATE di register.py
+      query = "SELECT nrp FROM tb_users WHERE uid = %s"
+      cursor.execute(query, (uid,))
+      result = cursor.fetchone()
+
+      cursor.close()
+      conn.close()
+
+      if result:
+        return True, result[0]  # Mengembalikan status & NRP pemilik kartu
+      return False, None
+
+    except mysql.connector.Error as err:
+      print(f"Database Error pada is_rfid_registered: {err}")
+      if conn:
+        conn.close()
+      return False, None
+
   def process_rfid_input(self, uid):
+    # 1. Validasi Keberadaan RFID di Database
+    is_registered, owner_nrp = self.is_rfid_registered(uid)
+
+    if is_registered:
+      # Tolak jika sudah dipakai user lain
+      self.current_uid = None
+      if hasattr(self, "lbCardR"):
+        self.lbCardR.setText("REJECTED")
+
+      self.lbInfoR.setText(
+          f"Kartu Sudah Terdaftar! (Milik NRP: {owner_nrp})"
+      )
+      self.lbInfoR.setStyleSheet("color: red; font-weight: bold;")
+
+      DbMessage.warning(
+          self,
+          "RFID Duplikat",
+          f"Kartu RFID ini sudah terikat dengan NRP: {owner_nrp}!\nGunakan"
+          " kartu lain.",
+      )
+      return
+
+    # 2. Jika Belum Terdaftar
     self.current_uid = uid
-    self.lbCardR.setText(f"{uid}")
+    if hasattr(self, "lbCardR"):
+      self.lbCardR.setText(f"{uid}")
 
     self.lbInfoR.setText("ID Card Successfully Scanned!")
     self.lbInfoR.setStyleSheet("color: green; font-weight: bold;")

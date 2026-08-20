@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import *
 from screens import Home, Login, Register, Saver
 from serial_handler import SerialHandler
 from utils import ClockHelper, SystemStatusHelper, center_on_screen
+from log_client import send_log
 
 
 def load_gudang_config():
@@ -134,6 +135,14 @@ class MainApp(QMainWindow):
         self.screens["home"].logout_signal.connect(self.reset_system)
 
         center_on_screen(self)
+
+        send_log(
+            kategori="system",
+            aktivitas="system_start",
+            detail=f"Storage Mode: {GUDANG}",
+            metode="startup",
+            status="success"
+        )
 
     def handle_data(self, role, tag, value):
         """
