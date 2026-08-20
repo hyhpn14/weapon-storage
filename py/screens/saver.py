@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import QIcon
 from PyQt5.uic import loadUi
 import geocoder
 import requests, socket
@@ -9,16 +10,28 @@ from db_config import get_db_connection
 class Saver(QMainWindow):
     go_to_login = pyqtSignal()
     
-    def __init__(self, clock_helper):
+    def __init__(self, clock_helper, serial_handler=None):
         super().__init__()
         loadUi("ui2/saverr.ui", self)
-        
+
+        self.serial = serial_handler
+        # Tracking status lampu (False = Mati, True = Menyala)
+        self.is_lamp_on = False
+
+        # Path Ikon (Sesuaikan lokasi/nama file ikon Anda)
+        self.icon_lamp_on = QIcon("assets/icon/lightbulb-solid-full.svg")
+        self.icon_lamp_off = QIcon("assets/icon/lightbulb-regular-full.svg")
+
         # Update jam dari helper pusat
         clock_helper.time_updated.connect(self.update_ui)
         self.btDown.clicked.connect(self.go_to_login.emit)
 
-        # === API KEY (PAKE PUNYA LU YANG UDAH WORK) ===
-        self.api_key = "58d5a389d75bd4647385189bc34c0580"  # ← GANTI SAMA PUNYA LU
+        # Connection event tombol btLamp (jika widget ada di .ui)
+        if hasattr(self, "btLamp"):
+            self.btLamp.clicked.connect(self.toggle_lamp)
+
+        # === API KEY  ===
+        self.api_key = "58d5a389d75bd4647385189bc34c0580"  
 
         # === AMBIL LOKASI OTOMATIS ===
         self.location_data = self.get_location_from_ip()
@@ -38,7 +51,30 @@ class Saver(QMainWindow):
         self.timer_db.timeout.connect(self.update_notif_pending)
         self.timer_db.start(3000)
 
-            
+    def toggle_lamp(self):
+        """Menyediakan toggle ON/OFF dan mengirim perintah ke Arduino."""
+        # Toggle state
+        self.is_lamp_on = not self.is_lamp_on
+
+        # Tentukan command yang dikirim ke Arduino (sesuaikan string command dengan firmware)
+        command = "LAMP ON" if self.is_lamp_on else "LAMP OFF"
+
+        if self.serial:
+        # Mengirim perintah ke Arduino (contoh target: "MAIN_CONTROLLER")
+            self.serial.send_command_to("MAIN_CONTROLLER", command)
+            print(f"Command Lampu Dikirim: {command}")
+        else:
+            print("Serial handler tidak tersedia!")
+
+        # Opsional: Ubah tampilan UI / Style Sheet tombol berdasarkan state lampu
+        if hasattr(self, "btLamp"):
+            if self.is_lamp_on:
+                
+                self.btLamp.setIcon(self.icon_lamp_on)
+            else:
+                self.btLamp.setStyleSheet("")
+                self.btLamp.setIcon(self.icon_lamp_off)
+        
     def update_ui(self, tgl, jam):
         self.lbDate.setText(tgl)
         self.lbTime.setText(jam)

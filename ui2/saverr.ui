@@ -690,6 +690,23 @@ letter-spacing: 6px;
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QPushButton" name="btLamp">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../assets/icon/lightbulb-regular-full.svg</normaloff>../assets/icon/lightbulb-regular-full.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+       </item>
        <item alignment="Qt::AlignRight">
         <widget class="QLabel" name="labelVersion">
          <property name="font">

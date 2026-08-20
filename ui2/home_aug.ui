@@ -408,7 +408,7 @@ border: 2px solid rgba(16, 185, 129, 0.30);
 border-radius: 10px;</string>
               </property>
               <property name="text">
-               <string>A1-FULL</string>
+               <string>FULL</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -583,12 +583,12 @@ border-radius: 10px;</string>
 font-size: 13px;
 font-weight: 600;
 font-family: Inter;
-background: rgba(220, 53, 69, 0.20);
-border: 2px solid rgba(220, 53, 69, 0.50);
+background: rgba(248, 214, 19, 0.20);
+border: 2px solid rgba(248, 214, 19, 0.40);
 border-radius: 10px;</string>
               </property>
               <property name="text">
-               <string>EMPTY</string>
+               <string>HALF</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -704,29 +704,37 @@ border-radius: 10px;</string>
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-    background: rgba(255, 255, 255, 0.03);
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-full-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
     border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    color: white;
-    font-family: Inter;
-    font-size: 11px;
-    font-weight: 600;
+    border-radius: 12px;
 }
+
 QPushButton:hover {
-    background: rgba(16, 185, 129, 0.15);
-    border: 2px solid rgba(16, 185, 129, 0.30);
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }
 QPushButton:pressed {
-    background: rgba(16, 185, 129, 0.30);
-    border: 2px solid rgba(16, 185, 129, 0.50);
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>../assets/state/aug/lock/aug-full-lock.png</normaloff>../assets/state/aug/lock/aug-full-lock.png</iconset>
+               <string>E1</string>
               </property>
               <property name="iconSize">
                <size>
@@ -752,29 +760,37 @@ QPushButton:pressed {
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-    background: rgba(255, 255, 255, 0.03);
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-full-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
     border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    color: white;
-    font-family: Inter;
-    font-size: 11px;
-    font-weight: 600;
+    border-radius: 12px;
 }
+
 QPushButton:hover {
-    background: rgba(16, 185, 129, 0.15);
-    border: 2px solid rgba(16, 185, 129, 0.30);
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }
 QPushButton:pressed {
-    background: rgba(16, 185, 129, 0.30);
-    border: 2px solid rgba(16, 185, 129, 0.50);
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>../assets/state/aug/lock/aug-full-lock.png</normaloff>../assets/state/aug/lock/aug-full-lock.png</iconset>
+               <string>E2</string>
               </property>
               <property name="iconSize">
                <size>
@@ -800,29 +816,37 @@ QPushButton:pressed {
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-    background: rgba(255, 255, 255, 0.03);
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-full-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
     border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    color: white;
-    font-family: Inter;
-    font-size: 11px;
-    font-weight: 600;
+    border-radius: 12px;
 }
+
 QPushButton:hover {
-    background: rgba(16, 185, 129, 0.15);
-    border: 2px solid rgba(16, 185, 129, 0.30);
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }
 QPushButton:pressed {
-    background: rgba(16, 185, 129, 0.30);
-    border: 2px solid rgba(16, 185, 129, 0.50);
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>../assets/state/aug/lock/aug-full-lock.png</normaloff>../assets/state/aug/lock/aug-full-lock.png</iconset>
+               <string>E3</string>
               </property>
               <property name="iconSize">
                <size>
@@ -848,29 +872,37 @@ QPushButton:pressed {
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-    background: rgba(255, 255, 255, 0.03);
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-full-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
     border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    color: white;
-    font-family: Inter;
-    font-size: 11px;
-    font-weight: 600;
+    border-radius: 12px;
 }
+
 QPushButton:hover {
-    background: rgba(16, 185, 129, 0.15);
-    border: 2px solid rgba(16, 185, 129, 0.30);
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }
 QPushButton:pressed {
-    background: rgba(16, 185, 129, 0.30);
-    border: 2px solid rgba(16, 185, 129, 0.50);
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>../assets/state/aug/lock/aug-full-lock.png</normaloff>../assets/state/aug/lock/aug-full-lock.png</iconset>
+               <string>E4</string>
               </property>
               <property name="iconSize">
                <size>
@@ -896,29 +928,37 @@ QPushButton:pressed {
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-    background: rgba(255, 255, 255, 0.03);
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-half-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
     border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    color: white;
-    font-family: Inter;
-    font-size: 11px;
-    font-weight: 600;
+    border-radius: 12px;
 }
+
 QPushButton:hover {
-    background: rgba(248, 214, 19, 0.20);
-    border: 2px solid rgba(248, 214, 19, 0.40);
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }
 QPushButton:pressed {
-    background: rgba(248, 214, 19, 0.30);
-    border: 2px solid rgba(248, 214, 19, 0.60);
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>../assets/state/aug/lock/aug-half-lock.png</normaloff>../assets/state/aug/lock/aug-half-lock.png</iconset>
+               <string>E5</string>
               </property>
               <property name="iconSize">
                <size>
@@ -944,29 +984,37 @@ QPushButton:pressed {
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-    background: rgba(255, 255, 255, 0.03);
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-empty-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
     border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    color: white;
-    font-family: Inter;
-    font-size: 11px;
-    font-weight: 600;
+    border-radius: 12px;
 }
+
 QPushButton:hover {
-    background: rgba(220, 53, 69, 0.20);
+    background-color: rgba(220, 53, 69, 0.20);
     border: 2px solid rgba(220, 53, 69, 0.50);
 }
 QPushButton:pressed {
-    background: rgba(220, 53, 69, 0.40);
+    background-color: rgba(220, 53, 69, 0.40);
     border: 2px solid rgba(220, 53, 69, 0.50);
 }</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>../assets/state/aug/lock/aug-empty-lock.png</normaloff>../assets/state/aug/lock/aug-empty-lock.png</iconset>
+               <string>F1</string>
               </property>
               <property name="iconSize">
                <size>
@@ -992,29 +1040,37 @@ QPushButton:pressed {
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-    background: rgba(255, 255, 255, 0.03);
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-half-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
     border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    color: white;
-    font-family: Inter;
-    font-size: 11px;
-    font-weight: 600;
+    border-radius: 12px;
 }
+
 QPushButton:hover {
-    background: rgba(220, 53, 69, 0.20);
+    background-color: rgba(220, 53, 69, 0.20);
     border: 2px solid rgba(220, 53, 69, 0.50);
 }
 QPushButton:pressed {
-    background: rgba(220, 53, 69, 0.40);
+    background-color: rgba(220, 53, 69, 0.40);
     border: 2px solid rgba(220, 53, 69, 0.50);
 }</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>../assets/state/aug/aug-close-2.png</normaloff>../assets/state/aug/aug-close-2.png</iconset>
+               <string>F2</string>
               </property>
               <property name="iconSize">
                <size>
@@ -1070,12 +1126,12 @@ QPushButton:pressed {
 }</string>
               </property>
               <property name="text">
-               <string/>
+               <string>F3</string>
               </property>
               <property name="iconSize">
                <size>
-                <width>80</width>
-                <height>300</height>
+                <width>70</width>
+                <height>280</height>
                </size>
               </property>
              </widget>
@@ -1108,7 +1164,7 @@ QPushButton:pressed {
     color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
 
     /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
-    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/aug-close.png&quot;);
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-empty-lock.png&quot;);
     background-position: center;
     background-repeat: no-repeat;
    background-color: rgba(255, 255, 255, 0.03);
@@ -1152,29 +1208,37 @@ QPushButton:pressed {
               </property>
               <property name="styleSheet">
                <string notr="true">QPushButton {
-    background: rgba(255, 255, 255, 0.03);
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 10px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/aug/lock/aug-half-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+   background-color: rgba(255, 255, 255, 0.03);
     border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: 10px;
-    color: white;
-    font-family: Inter;
-    font-size: 11px;
-    font-weight: 600;
+    border-radius: 12px;
 }
+
 QPushButton:hover {
-    background: rgba(248, 214, 19, 0.20);
-    border: 2px solid rgba(248, 214, 19, 0.40);
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }
 QPushButton:pressed {
-    background: rgba(248, 214, 19, 0.30);
-    border: 2px solid rgba(248, 214, 19, 0.60);
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
 }</string>
               </property>
               <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset>
-                <normaloff>../assets/state/aug/lock/aug-half-lock.png</normaloff>../assets/state/aug/lock/aug-half-lock.png</iconset>
+               <string>F5</string>
               </property>
               <property name="iconSize">
                <size>

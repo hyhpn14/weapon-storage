@@ -83,7 +83,7 @@ class MainApp(QMainWindow):
         }
 
         self.screens = {
-            "saver": Saver(self.clock_helper),
+            "saver": Saver(self.clock_helper,serial_handler=self.serial_handler),
             "login": Login( self.clock_helper, serial_handler=self.serial_handler, gudang=GUDANG,),
             "register": Register(
                 self.clock_helper,
