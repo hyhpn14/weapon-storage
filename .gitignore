@@ -1,0 +1,15 @@
+# Cache Python
+__pycache__/
+*.pyc
+
+# Virtual Environment (Sangat penting agar tidak mengunggah puluhan MB library)
+venv/
+.venv/
+env/
+
+# File Environment / Rahasia (API Key, Passwords)
+.env
+
+# Folder VS Code / PyCharm
+.vscode/
+.idea/

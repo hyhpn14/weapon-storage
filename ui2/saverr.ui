@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>SignalPro - Gun Storage System</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background: qlineargradient(
+        x1: 0, y1: 0, x2: 1, y2: 1,
+        stop: 0 #0a1628,
+        stop: 0.4 #142240,
+        stop: 0.7 #1a2a4a,
+        stop: 1 #0d1f3c
+    );
+}
+
+QFrame {
+    border: none;
+}
+
+QPushButton {
+    border: none;
+    background: transparent;
+}
+
+QFrame#frame {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 30px;
+    border: none;
+}
+
+QFrame#frame_3 {
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+QLabel#label {
+    color: #ffffff;
+    font-family: Plus Jakarta Sans;
+    font-size: 22px;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    letter-spacing: 3px;
+}
+
+/* JAM - Space Grotesk */
+QLabel#lbTime {
+    color: rgba(255, 255, 255, 0.90);
+    font-family: Space Grotesk;
+    font-size: 100px;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    letter-spacing: 6px;
+}
+
+/* TANGGAL - Inter */
+QLabel#lbDate {
+    color: rgba(255, 255, 255, 0.60);
+    font-family: Inter;
+    font-size: 16px;
+    font-weight: 400;
+    background: transparent;
+    border: none;
+    letter-spacing: 1px;
+}
+
+/* LOGO */
+QLabel#labelLogo {
+    background: transparent;
+    border: none;
+}
+
+/* TOMBOL ENTER - Glass Style */
+/* Normal: border tipis transparan */
+QPushButton#btDown {
+    background: rgba(255, 255, 255, 0.03);
+   
+    border-radius: 30px;
+}
+
+/* Hover: border lebih terang + glow biru */
+QPushButton#btDown:hover {
+    background: rgba(2, 72, 193, 0.12);
+    border: 1px solid #0248c1;
+    box-shadow: 0 0 20px rgba(2, 72, 193, 0.2); /* efek glow (kalo support) */
+}
+
+QPushButton#btDown:pressed {
+    background: rgba(2, 72, 193, 0.25);
+    border: 2px solid #0248c1;
+}
+
+/* STATUS LABEL - Inter */
+QLabel#statusLabel {
+    color: #10b981;
+    font-family: Inter;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+}
+
+QFrame#frame_status {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0 0 30px 30px;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+QLabel#labelVersion {
+    color: #f8d613;
+    font-family: Inter;
+    font-size: 12px;
+    font-weight: 400;
+    background: transparent;
+    border: none;
+}
+
+
+QLabel#labelLocation, QLabel#labelTemp, QLabel#labelHumidity {
+    color: rgba(255, 255, 255, 0.70);
+    font-family: Inter;
+    font-size: 15px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+}
+
+QLabel#labelTemp:hover {
+    color: #f8d613;
+}
+
+QScrollBar:vertical {
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    border-radius: 8px;
+    width: 4px;
+}
+
+QScrollBar::handle:vertical {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    min-height: 30px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: rgba(248, 214, 19, 0.20);
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-color: transparent;</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>40</number>
+    </property>
+    <property name="topMargin">
+     <number>40</number>
+    </property>
+    <property name="rightMargin">
+     <number>40</number>
+    </property>
+    <property name="bottomMargin">
+     <number>40</number>
+    </property>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QFrame" name="frame">
+      <property name="minimumSize">
+       <size>
+        <width>650</width>
+        <height>300</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>650</width>
+        <height>300</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_3">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>170</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>170</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="lbTime">
+            <property name="font">
+             <font>
+              <family>Space Grotesk</family>
+              <pointsize>-1</pointsize>
+              <weight>87</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>00:00</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_info">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>5</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_info">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>45</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">/* Info Frame */
+QFrame#frame_info {
+    background: rgba(255, 255, 255, 0.03);
+    border: none;
+    border-radius: 12px;
+}</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_info">
+          <property name="spacing">
+           <number>20</number>
+          </property>
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="labelLocation">
+            <property name="font">
+             <font>
+              <family>Inter</family>
+              <pointsize>-1</pointsize>
+              <weight>62</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>📍 Server Room A1</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="labelTemp">
+            <property name="font">
+             <font>
+              <family>Inter</family>
+              <pointsize>-1</pointsize>
+              <weight>62</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>🌡️ 24°C</string>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="labelHumidity">
+            <property name="font">
+             <font>
+              <family>Inter</family>
+              <pointsize>-1</pointsize>
+              <weight>62</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>💧 45% RH</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_logo">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>5</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_5">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>80</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <property name="bottomMargin">
+           <number>5</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="labelLogo">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>150</width>
+              <height>60</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap>../assets/Gun-Storage.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLabel" name="lbDate">
+            <property name="font">
+             <font>
+              <family>Inter</family>
+              <pointsize>-1</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Friday, 26 June 2026</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QFrame" name="frame_2">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>80</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>80</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QPushButton" name="btDown">
+         <property name="minimumSize">
+          <size>
+           <width>70</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../assets/down.png</normaloff>../assets/down.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>48</width>
+           <height>48</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_status">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>45</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_status">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>20</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="statusLabel">
+         <property name="font">
+          <font>
+           <family>Inter</family>
+           <pointsize>-1</pointsize>
+           <weight>62</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>● System Active</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>30</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap>../assets/icon/bell-solid-full.svg</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lbNotif">
+         <property name="font">
+          <font>
+           <family>Space Grotesk</family>
+           <pointsize>-1</pointsize>
+           <weight>87</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(255, 247, 1);
+font-family: Space Grotesk;
+font-size: 23px;
+font-weight: 700;
+background: transparent;
+border: none;
+letter-spacing: 6px;
+</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_status">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btLamp">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../assets/icon/lightbulb-regular-full.svg</normaloff>../assets/icon/lightbulb-regular-full.svg</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>25</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignRight">
+        <widget class="QLabel" name="labelVersion">
+         <property name="font">
+          <font>
+           <family>Inter</family>
+           <pointsize>-1</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>V2.0.1</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,1382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Weapon Storage - Home</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background: qlineargradient(
+        x1: 0, y1: 0, x2: 1, y2: 1,
+        stop: 0 #0a1628,
+        stop: 0.4 #142240,
+        stop: 0.7 #1a2a4a,
+        stop: 1 #0d1f3c
+    );
+}
+
+QFrame#frame {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 30px;
+    border: none;
+}
+
+QFrame#frame_header {
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+QLabel#labelTitle {
+    color: #ffffff;
+    font-family: Plus Jakarta Sans;
+    font-size: 20px;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    letter-spacing: 2px;
+}
+
+QLabel#lbUser {
+	color: #ffffff;
+    font-family: Plus Jakarta Sans;
+    font-size: 15px;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    letter-spacing: 2px;
+}
+
+QFrame#frame_stats {
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+QLabel { background: transparent; border: none; font-family: Inter; }
+QLabel#statTotal { color: rgba(255,255,255,0.80); font-size: 12px; font-weight: 600; }
+QLabel#statFilled { color: #10b981; font-size: 12px; font-weight: 600; }
+QLabel#statEmpty { color: #3b82f6; font-size: 12px; font-weight: 600; }
+QLabel#statAlert { color: #dc3545; font-size: 12px; font-weight: 600; }
+QLabel#statPercent { color: #f8d613; font-size: 12px; font-weight: 700; }
+QLabel#labelUser { color: #ffffff; font-size: 13px; font-weight: 600; }
+
+QFrame#frame_grid {
+    background: transparent;
+    border: none;
+}
+
+QPushButton#btRefresh {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.70);
+    font-family: Inter;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 20px;
+    min-height: 20px;
+}
+QPushButton#btRefresh:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.20);
+}
+
+QPushButton#btLogout {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}
+QPushButton#btLogout:hover {
+    background: rgba(255, 70, 70, 0.15);
+    border: 1px solid rgba(255, 70, 70, 0.30);
+}
+
+QFrame#frame_status {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0 0 30px 30px;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+QLabel#statusLabel {
+    color: #10b981;
+    font-family: Inter;
+    font-size: 12px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+}
+
+QLabel#labelVersion {
+    color: #f8d613;
+    font-family: Inter;
+    font-size: 11px;
+    font-weight: 400;
+    background: transparent;
+    border: none;
+}
+
+QScrollBar:vertical {
+    background: rgba(255, 255, 255, 0.02);
+    border: none;
+    border-radius: 8px;
+    width: 6px;
+}
+QScrollBar::handle:vertical {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    min-height: 30px;
+}
+QScrollBar::handle:vertical:hover {
+    background: rgba(248, 214, 19, 0.20);
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-color: transparent;</string>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_main">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>30</number>
+    </property>
+    <property name="topMargin">
+     <number>30</number>
+    </property>
+    <property name="rightMargin">
+     <number>30</number>
+    </property>
+    <property name="bottomMargin">
+     <number>25</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_main_inner">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_header">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>65</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_header">
+          <property name="leftMargin">
+           <number>25</number>
+          </property>
+          <property name="rightMargin">
+           <number>25</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="labelTitle">
+            <property name="text">
+             <string>WEAPON STORAGE STATUS</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_header">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btRefresh">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>38</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../assets/icon/arrows-rotate-solid-full.svg</normaloff>../assets/icon/arrows-rotate-solid-full.svg</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_user">
+            <property name="maximumSize">
+             <size>
+              <width>180</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_user">
+             <property name="spacing">
+              <number>8</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="labelUserIcon">
+               <property name="minimumSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>24</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="pixmap">
+                <pixmap>../assets/icon/user-regular-full.svg</pixmap>
+               </property>
+               <property name="scaledContents">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lbUser">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>ADMIN</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btLogout">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>../assets/icon/arrow-right-from-bracket-solid-full.svg</normaloff>../assets/icon/arrow-right-from-bracket-solid-full.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>25</width>
+                 <height>25</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_stats">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>45</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_stats">
+          <property name="leftMargin">
+           <number>25</number>
+          </property>
+          <property name="rightMargin">
+           <number>25</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="statTotal">
+            <property name="text">
+             <string>📦 Total: 20</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="statFilled">
+            <property name="text">
+             <string>🔒 Terisi: 0</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="statEmpty">
+            <property name="text">
+             <string>📥 Kosong: 20</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="statAlert">
+            <property name="text">
+             <string>⚠️ Alert: 0</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_stats">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="statPercent">
+            <property name="text">
+             <string>0% Terisi</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>958</width>
+            <height>779</height>
+           </rect>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_scroll">
+           <item>
+            <widget class="QFrame" name="frame_grid">
+             <layout class="QVBoxLayout" name="verticalLayout_grid">
+              <property name="leftMargin">
+               <number>20</number>
+              </property>
+              <property name="topMargin">
+               <number>15</number>
+              </property>
+              <property name="rightMargin">
+               <number>20</number>
+              </property>
+              <property name="bottomMargin">
+               <number>15</number>
+              </property>
+              <item>
+               <layout class="QGridLayout" name="gridLayout_lockers">
+                <property name="spacing">
+                 <number>15</number>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QPushButton" name="btA1">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/lock/gl-full-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+QPushButton:hover {
+    background-color: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.30);
+}
+QPushButton:pressed {
+    background-color: rgba(16, 185, 129, 0.30);
+    border: 2px solid rgba(16, 185, 129, 0.50);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>A1</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/gl-full.png</normaloff>../assets/gl-full.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>150</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QPushButton" name="btA2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/lock/gl-full-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+QPushButton:hover {
+    background-color: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.30);
+}
+QPushButton:pressed {
+    background-color: rgba(16, 185, 129, 0.30);
+    border: 2px solid rgba(16, 185, 129, 0.50);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>A2</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/gl-full.png</normaloff>../assets/gl-full.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>150</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QPushButton" name="btA3">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/lock/gl-empty-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+QPushButton:hover {
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}
+QPushButton:pressed {
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>A3</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/gl-empty.png</normaloff>../assets/gl-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>150</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QPushButton" name="btA4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/lock/gl-full-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+QPushButton:hover {
+    background-color: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.30);
+}
+QPushButton:pressed {
+    background-color: rgba(16, 185, 129, 0.30);
+    border: 2px solid rgba(16, 185, 129, 0.50);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>A4</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/full2.png</normaloff>../assets/full2.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="4">
+                 <widget class="QPushButton" name="btA5">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/close-warning.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+QPushButton:hover {
+    background-color: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.30);
+}
+QPushButton:pressed {
+    background-color: rgba(16, 185, 129, 0.30);
+    border: 2px solid rgba(16, 185, 129, 0.50);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>A5</string>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QPushButton" name="btB1">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/lock/gl-half-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+QPushButton:hover {
+    background-color: rgba(248, 214, 19, 0.15);
+    border: 2px solid rgba(248, 214, 19, 0.6);
+}
+QPushButton:pressed {
+    background-color: rgba(248, 214, 19, 0.30);
+    border: 2px solid rgba(248, 214, 19, 0.60);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>B1</string>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>150</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QPushButton" name="btB2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/lock/gl-half-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+QPushButton:hover {
+    background-color: rgba(248, 214, 19, 0.15);
+    border: 2px solid rgba(248, 214, 19, 0.6);
+}
+QPushButton:pressed {
+    background-color: rgba(248, 214, 19, 0.30);
+    border: 2px solid rgba(248, 214, 19, 0.60);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>B2</string>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>150</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QPushButton" name="btB3">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/lock/gl-empty-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+QPushButton:hover {
+    background-color: rgba(220, 53, 69, 0.20);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}
+QPushButton:pressed {
+    background-color: rgba(220, 53, 69, 0.40);
+    border: 2px solid rgba(220, 53, 69, 0.50);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>B3</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/gl-empty.png</normaloff>../assets/gl-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>150</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="3">
+                 <widget class="QPushButton" name="btB4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/lock/gl-full-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+QPushButton:hover {
+    background-color: rgba(16, 185, 129, 0.15);
+    border: 2px solid rgba(16, 185, 129, 0.30);
+}
+QPushButton:pressed {
+    background-color: rgba(16, 185, 129, 0.30);
+    border: 2px solid rgba(16, 185, 129, 0.50);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>B4</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/gl-full.png</normaloff>../assets/gl-full.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>150</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="4">
+                 <widget class="QPushButton" name="btB5">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    /* Mengatur teks tombol di kiri atas */
+    text-align: left top;
+    padding-left: 15px;
+    padding-top: 5px;
+    
+    /* Font style untuk teks posisi */
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.4); /* Mengikuti warna samar 'A1' pada desain */
+
+    /* Mengatur latar belakang tombol dengan Icon yang kamu punya */
+    background-image: url(&quot;C:/Users/programmer/Documents/06. Project 2026/08. Gun storage/scr/assets/state/glock/lock/gl-half-lock.png&quot;);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+QPushButton:hover {
+    background-color: rgba(248, 214, 19, 0.15);
+    border: 2px solid rgba(248, 214, 19, 0.6);
+}
+QPushButton:pressed {
+    background-color: rgba(248, 214, 19, 0.30);
+    border: 2px solid rgba(248, 214, 19, 0.60);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>B5</string>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>20</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QPushButton" name="btC1">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>C1</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/C1-empty.png</normaloff>../assets/status/C1-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QPushButton" name="btC2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>C2</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/C2-empty.png</normaloff>../assets/status/C2-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QPushButton" name="btC3">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>C3</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/C3-empty.png</normaloff>../assets/status/C3-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="3">
+                 <widget class="QPushButton" name="btC4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>C4</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/C4-empty.png</normaloff>../assets/status/C4-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="4">
+                 <widget class="QPushButton" name="btC5">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>C5</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/C5-empty.png</normaloff>../assets/status/C5-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QPushButton" name="btD1">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>D1</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/D1-empty.png</normaloff>../assets/status/D1-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QPushButton" name="btD2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>D2</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/D2-empty.png</normaloff>../assets/status/D2-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QPushButton" name="btD3">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>D3</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/D3-empty.png</normaloff>../assets/status/D3-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="3">
+                 <widget class="QPushButton" name="btD4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>D4</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/D4-empty.png</normaloff>../assets/status/D4-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="4">
+                 <widget class="QPushButton" name="btD5">
+                  <property name="minimumSize">
+                   <size>
+                    <width>140</width>
+                    <height>170</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>160</width>
+                    <height>190</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>D5</string>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../assets/status/D5-empty.png</normaloff>../assets/status/D5-empty.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>120</width>
+                    <height>140</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_status">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>55</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>55</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_status">
+          <property name="leftMargin">
+           <number>25</number>
+          </property>
+          <property name="rightMargin">
+           <number>25</number>
+          </property>
+          <item alignment="Qt::AlignLeft">
+           <widget class="QLabel" name="statusLabel">
+            <property name="text">
+             <string>● System Active</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_status">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLabel" name="labelVersion">
+            <property name="text">
+             <string>V2.0.1</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

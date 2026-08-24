@@ -1,0 +1,178 @@
+class LockerButton(QPushButton):
+    def __init__(self, locker_id=None, parent=None, storage_type="glock"):
+        """
+        storage_type: "glock" atau "aug"
+        """
+        super().__init__(parent)
+        self.locker_id = locker_id
+        self.storage_type = storage_type  # ← Simpan tipe storage
+        self.setStyleSheet("border: none;")
+
+        # State default
+        self.berat = "C"        # A, B, C
+        self.relay = 0          # 0 = Lock, 1 = Open
+        self.jumlah_peluru = 0
+        self.is_warning = False
+        self.is_open_pending = False
+
+        # ... (kode lainnya tetap sama) ...
+
+        # Saat inisialisasi, set icon default
+        self.update_icon()
+
+    # ============================================================
+    # HELPER: Path Icon & GIF
+    # ============================================================
+    def _get_icon_path(self, berat, relay_state):
+        """Mengembalikan path icon berdasarkan storage_type, berat, dan relay_state."""
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        berat_map = {"A": "full", "B": "half", "C": "empty"}
+        relay_map = {1: "open", 0: "lock"}
+
+        berat_str = berat_map.get(berat, "empty")
+        relay_str = relay_map.get(relay_state, "lock")
+
+        # Format filename sesuai storage_type
+        if self.storage_type == "aug":
+            file_name = f"aug-{berat_str}-{relay_str}.png"
+        else:  # glock
+            file_name = f"glock-{berat_str}-{relay_str}.png"
+
+        path = os.path.join(base_dir, "assets", "state", self.storage_type, relay_str, file_name)
+        return path.replace("\\", "/")
+
+    def _get_gif_path(self, gif_name):
+        """Mengembalikan path GIF berdasarkan storage_type."""
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        path = os.path.join(base_dir, "assets", "state", self.storage_type, gif_name)
+        return path.replace("\\", "/")
+
+    # ============================================================
+    # OVERRIDE play_gif (menggunakan GIF spesifik storage)
+    # ============================================================
+    def play_gif(self, gif_path, duration_ms=0, bg_color="rgba(16, 185, 129, 0.25)", border_color="rgba(16, 185, 129, 0.70)"):
+        """
+        Memutar file GIF. Jika gif_path adalah nama file saja (misal 'open.gif'),
+        maka akan dicari di folder assets/state/{storage_type}/.
+        """
+        # Jika path hanya nama file (tanpa folder), gunakan folder spesifik storage
+        if not os.path.dirname(gif_path):
+            # Cek di folder storage dulu, fallback ke root state
+            storage_path = self._get_gif_path(gif_path)
+            if os.path.exists(storage_path):
+                abs_path = storage_path
+            else:
+                # Fallback ke folder assets/state/ (global)
+                base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                fallback_path = os.path.join(base_dir, "assets", "state", gif_path)
+                abs_path = fallback_path
+        else:
+            abs_path = gif_path
+
+        # Lanjutkan dengan logika play_gif yang sudah ada...
+        # (copy-paste kode play_gif dari utils.py, tapi gunakan abs_path di atas)
+        # ... (sisanya sama) ...
+
+    # ============================================================
+    # UPDATE ICON (Pakai helper di atas)
+    # ============================================================
+    def update_icon(self):
+        """Set tampilan tombol berdasarkan status berat, relay, dan storage_type."""
+        self.stop_gif()
+
+        if self.locker_id:
+            self.setText(str(self.locker_id))
+
+        # Tentukan apakah tampilan harus open
+        display_open = bool(getattr(self, "is_open_pending", False)) or self.relay == 1
+        relay_for_display = 1 if display_open else 0
+
+        # Ambil path icon
+        icon_path = self._get_icon_path(self.berat, relay_for_display)
+
+        # Warna berdasarkan berat
+        color_config = {
+            "A": {
+                "active_bg": "rgba(16, 185, 129, 0.25)",
+                "active_border": "rgba(16, 185, 129, 0.70)",
+                "hover_bg": "rgba(16, 185, 129, 0.15)",
+                "hover_border": "rgba(16, 185, 129, 0.40)",
+                "pressed_bg": "rgba(16, 185, 129, 0.30)",
+            },
+            "B": {
+                "active_bg": "rgba(248, 214, 19, 0.25)",
+                "active_border": "rgba(248, 214, 19, 0.70)",
+                "hover_bg": "rgba(248, 214, 19, 0.15)",
+                "hover_border": "rgba(248, 214, 19, 0.40)",
+                "pressed_bg": "rgba(248, 214, 19, 0.30)",
+            },
+            "C": {
+                "active_bg": "rgba(239, 68, 68, 0.25)",
+                "active_border": "rgba(239, 68, 68, 0.70)",
+                "hover_bg": "rgba(239, 68, 68, 0.15)",
+                "hover_border": "rgba(239, 68, 68, 0.40)",
+                "pressed_bg": "rgba(239, 68, 68, 0.30)",
+            }
+        }
+        colors = color_config.get(self.berat, color_config["C"])
+
+        # Cek apakah icon exist, jika tidak fallback ke default
+        if os.path.exists(icon_path):
+            formatted_path = icon_path.replace("\\", "/")
+            if display_open:
+                self.setStyleSheet(f"""
+                    QPushButton {{
+                        text-align: left top;
+                        padding-left: 15px;
+                        padding-top: 8px;
+                        font-family: 'Inter', sans-serif;
+                        font-size: 16px;
+                        font-weight: bold;
+                        color: rgba(255, 255, 255, 0.9);
+                        background-image: url('{formatted_path}');
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-color: {colors['active_bg']};
+                        border: 2px solid {colors['active_border']};
+                        border-radius: 12px;
+                    }}
+                    QPushButton:hover {{
+                        background-color: {colors['active_bg']};
+                        border: 2px solid {colors['active_border']};
+                    }}
+                    QPushButton:pressed {{
+                        background-color: {colors['pressed_bg']};
+                        border: 2px solid {colors['active_border']};
+                    }}
+                """)
+            else:
+                self.setStyleSheet(f"""
+                    QPushButton {{
+                        text-align: left top;
+                        padding-left: 15px;
+                        padding-top: 8px;
+                        font-family: 'Inter', sans-serif;
+                        font-size: 16px;
+                        font-weight: bold;
+                        color: rgba(255, 255, 255, 0.5);
+                        background-image: url('{formatted_path}');
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-color: rgba(255, 255, 255, 0.03);
+                        border: 2px solid rgba(255, 255, 255, 0.06);
+                        border-radius: 12px;
+                    }}
+                    QPushButton:hover {{
+                        background-color: {colors['hover_bg']};
+                        border: 2px solid {colors['hover_border']};
+                    }}
+                    QPushButton:pressed {{
+                        background-color: {colors['pressed_bg']};
+                        border: 2px solid {colors['active_border']};
+                    }}
+                """)
+        else:
+            print(f"[LockerButton] Icon tidak ditemukan: {icon_path}")
+
+        # Update teks peluru
+        self.set_jumlah_peluru(self.jumlah_peluru)
