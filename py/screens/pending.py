@@ -6,12 +6,21 @@ from .custom_dialog import CustomMessageBox
 from .admin_pin import AdminPinDialog  # Import Custom PIN Dialog kita
 from camera import start_unauthorized_capture, start_access_capture
 from log_client import send_log
+from notifier import trigger_security_alert
 
 class PendingDialog(QDialog):
     def __init__(self, parent=None, gudang="GLOCK17"):
         super().__init__(parent)
         loadUi("ui2/dialogs/pending_dialog.ui", self)
-        self.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint) 
+       # Ubah flags agar dipaksa paling depan
+        self.setWindowFlags(
+            Qt.Window
+            | Qt.FramelessWindowHint
+            | Qt.WindowStaysOnTopHint
+            | Qt.CustomizeWindowHint
+        )
+        self.setWindowModality(Qt.ApplicationModal)
+        self.center_dialog()
 
         self.gudang = gudang
         self.approved_data = None
@@ -27,6 +36,14 @@ class PendingDialog(QDialog):
         self.tableUsers.itemDoubleClicked.connect(self.handle_enroll)
 
         self.load_pending_users()
+
+    def center_dialog(self):
+        if self.parent():
+            parent_rect = self.parent().geometry()
+            geo = self.geometry()
+            x = parent_rect.x() + (parent_rect.width() - geo.width()) // 2
+            y = parent_rect.y() + (parent_rect.height() - geo.height()) // 2
+            self.move(x, y)
 
     def handle_enroll(self):
         selected_row = self.tableUsers.currentRow()
@@ -82,8 +99,20 @@ class PendingDialog(QDialog):
                 metode="pin",
                 status="danger"
             )
-            CustomMessageBox.show_warning(self, "Akses Ditolak","PIN Super Admin salah! Akses ditolak." )
+            try:
+                reason_msg = (
+                    f"Percobaan input PIN Super Admin salah saat akan meng-ACC"
+                    f" user NRP {row_data.get('nrp')} ({row_data.get('nama')})"
+                )
+                trigger_security_alert(
+                    gudang=self.gudang, auth_type="super_admin_pin", reason=reason_msg
+                )
+            except Exception as e:
+                print(f"Error trigger security alert PIN Super Admin: {e}")
 
+                CustomMessageBox.show_warning(
+                    self, "Akses Ditolak", "PIN Super Admin salah! Akses ditolak."
+                )
     def verify_super_admin_pin(self, input_pin):
         try:
             conn = get_db_connection()

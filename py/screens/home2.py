@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.uic import loadUi
 from utils import LockerButton
 from dialogs import DbMessage
+from custom_dialog import CustomMessageBox
 from db_config import get_db_connection
 
 LOCKER_ORDER = ["A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5",
@@ -304,13 +305,14 @@ class Home(QMainWindow):
 
         if open_lockers:
             list_ids = ", ".join([btn.locker_id for btn in open_lockers])
-            msg = DbMessage(
-                self,
-                title="Logout Ditolak",
-                message=f"Loker berikut masih terbuka secara fisik: {list_ids}. Silakan tutup loker tersebut!",
-                success=False
-            )
-            msg.exec_()
+            CustomMessageBox.show_warning(self, "Logout Failed", f"Lockers {list_ids} are still open. Please close those lockers before logging out.")
+            # msg = DbMessage(
+            #     self,
+            #     title="Logout Ditolak",
+            #     message=f"Loker berikut masih terbuka secara fisik: {list_ids}. Silakan tutup loker tersebut!",
+            #     success=False
+            # )
+            # msg.exec_()
             for btn in open_lockers:
                 btn.show_warning_icon()
             return

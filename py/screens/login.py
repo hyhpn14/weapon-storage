@@ -191,7 +191,7 @@ class Login(QMainWindow):
   def open_auth_finger(self):
     self.reset_all_auth_data()
 
-    self.active_auth_dialog = AuthFinger(
+    self.active_auth_dialog = AuthFinger(parent=self.window(),
         serial_handler=self.serial_handler, gudang=self.gudang
     )
     res = self.active_auth_dialog.exec_()
@@ -213,7 +213,7 @@ class Login(QMainWindow):
   def open_auth_rfid(self):
     self.reset_all_auth_data()
 
-    self.active_auth_dialog = AuthRFID(
+    self.active_auth_dialog = AuthRFID( parent=self.window(),
         serial_handler=self.serial_handler, gudang=self.gudang
     )
     res = self.active_auth_dialog.exec_()
@@ -235,7 +235,7 @@ class Login(QMainWindow):
   def open_auth_pin(self):
     self.reset_all_auth_data()
 
-    self.active_auth_dialog = AuthPin(
+    self.active_auth_dialog = AuthPin(parent=self.window(),
         serial_handler=self.serial_handler, gudang=self.gudang
     )
     res = self.active_auth_dialog.exec_()

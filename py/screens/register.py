@@ -5,6 +5,7 @@ from dialogs import DbMessage  # Pastikan ini diimpor dari file dialogs.py
 from userScan import ScanFinger, ScanRfid, ScanPin
 from db_config import get_db_connection  # Pastikan ini diimpor dari file db_config.py
 from .pending import PendingDialog
+from .custom_dialog import CustomMessageBox  # Pastikan ini diimpor dari file custom_dialog.py
 
 GREEN_STYLE = """
     QPushButton {
@@ -180,7 +181,7 @@ class Register(QMainWindow):
             self.serial.send_command_to(self.target_role, 'e')
             print(f"{self.target_role}e{self.next_id}")
 
-        dialog = ScanFinger(nrp=nrp, serial_handler=self.serial, finger_id=self.next_id)
+        dialog = ScanFinger(parent=self, nrp=nrp, serial_handler=self.serial, finger_id=self.next_id)
         if dialog.exec_() == QDialog.Accepted:
             self.finger_id = self.next_id
             self.btRSFinger.setStyleSheet(GREEN_STYLE)
@@ -196,7 +197,7 @@ class Register(QMainWindow):
             self.serial.send_command_to(self.target_role, 'r')
             print("r")
 
-        dialog = ScanRfid(nrp=nrp, serial_handler=self.serial)
+        dialog = ScanRfid(parent=self, nrp=nrp, serial_handler=self.serial)
         if dialog.exec_() == QDialog.Accepted:
             self.rfid_uid = dialog.current_uid
             self.btRSId.setStyleSheet(GREEN_STYLE)
@@ -208,7 +209,7 @@ class Register(QMainWindow):
             self.show_message("Peringatan", "Pilih data user di tombol Pending terlebih dahulu!", success=False)
             return
             
-        dialog = ScanPin(nrp=nrp)
+        dialog = ScanPin(parent=self, nrp=nrp)
         if dialog.exec_() == QDialog.Accepted:
             self.pin = dialog.pin
             self.btRSPin.setStyleSheet(GREEN_STYLE)
@@ -262,8 +263,9 @@ class Register(QMainWindow):
             self.show_message("Database Error", str(e), success=False)
 
     def show_message(self, title, message, success=True):
-        msg = DbMessage(self, title=title, message=message, success=success)
-        msg.exec_()
+        CustomMessageBox.show_info(self, title, message) if success else CustomMessageBox.show_warning(self, title, message)    
+        # msg = DbMessage(self, title=title, message=message, success=success)
+        # msg.exec_()
 
     def handle_close(self):
         self.reset_form()

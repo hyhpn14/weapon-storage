@@ -6,6 +6,7 @@ from PyQt5.uic import loadUi
 from serial_handler import SerialHandler
 from log_client import send_log
 from db_config import get_db_connection
+from screens.custom_dialog import CustomMessageBox
 
 # Mapping keyword dari Arduino -> teks UI yang rapi
 FINGER_STATUS_MAP = {
@@ -21,11 +22,20 @@ FINGER_STATUS_MAP = {
 # --- CLASS SCAN FINGER ---
 class ScanFinger(QDialog):
 
-    def __init__(self, nrp, serial_handler=None, finger_id=None, gudang="GLOCK17"):
-        super().__init__()
+    def __init__(self, parent=None, nrp="", serial_handler=None, finger_id=None, gudang="GLOCK17"):
+        super().__init__(parent)
         loadUi("ui2/dialogs/enroll_finger.ui", self)
+       # 1. Flag & Modality
+        self.setWindowFlags(
+            Qt.Window
+            | Qt.FramelessWindowHint
+            | Qt.WindowStaysOnTopHint
+            | Qt.CustomizeWindowHint
+        )
         self.setWindowModality(Qt.ApplicationModal)
-        self.setWindowFlags(Qt.FramelessWindowHint)
+
+        # 2. Posisikan Tepat di Tengah
+        self.center_dialog()
 
         self.nrp = nrp
         self.target_id = finger_id
@@ -140,11 +150,20 @@ class ScanFinger(QDialog):
 # --- CLASS SCAN RFID ---
 class ScanRfid(QDialog):
 
-    def __init__(self, nrp, serial_handler=None):
-        super().__init__()
+    def __init__(self, parent=None, nrp="", serial_handler=None):
+        super().__init__(parent)
         loadUi("ui2/dialogs/enroll_rfid.ui", self)
+        # 1. Flag & Modality
+        self.setWindowFlags(
+            Qt.Window
+            | Qt.FramelessWindowHint
+            | Qt.WindowStaysOnTopHint
+            | Qt.CustomizeWindowHint
+        )
         self.setWindowModality(Qt.ApplicationModal)
-        self.setWindowFlags(Qt.FramelessWindowHint)
+
+        # 2. Posisikan Tepat di Tengah
+        self.center_dialog()
 
         self.nrp = nrp
         self.serial = serial_handler
@@ -227,11 +246,12 @@ class ScanRfid(QDialog):
             self.lbInfoR.setText(f"Kartu Sudah Terdaftar! (Milik NRP: {owner_nrp})")
             self.lbInfoR.setStyleSheet("color: red; font-weight: bold;")
 
-            DbMessage.warning(
-                self,
-                "RFID Duplikat",
-                f"Kartu RFID ini sudah terikat dengan NRP: {owner_nrp}!\nGunakan kartu lain.",
-            )
+            CustomMessageBox.show_warning(self, "Error", f"Card already registered! (Owner: {owner_nrp})\nPlease use another card.")
+            # DbMessage.warning(
+            #     self,
+            #     "RFID Duplikat",
+            #     f"Kartu RFID ini sudah terikat dengan NRP: {owner_nrp}!\nGunakan kartu lain.",
+            # )
             return
 
         self.current_uid = uid
@@ -267,11 +287,20 @@ class ScanRfid(QDialog):
 # --- CLASS SCAN PIN ---
 class ScanPin(QDialog):
 
-    def __init__(self, nrp):
-        super().__init__()
+    def __init__(self, parent=None, nrp=""):
+        super().__init__(parent)
         loadUi("ui2/dialogs/enroll_pin.ui", self)
+        # 1. Flag & Modality
+        self.setWindowFlags(
+            Qt.Window
+            | Qt.FramelessWindowHint
+            | Qt.WindowStaysOnTopHint
+            | Qt.CustomizeWindowHint
+        )
         self.setWindowModality(Qt.ApplicationModal)
-        self.setWindowFlags(Qt.FramelessWindowHint)
+
+        # 2. Posisikan Tepat di Tengah
+        self.center_dialog()
 
         self.nrp = nrp
 
@@ -290,7 +319,7 @@ class ScanPin(QDialog):
     def save_data(self):
         pin = self.lbPinR.text()
         if len(pin) < 4:
-            QMessageBox.warning(self, "Error", "PIN terlalu pendek!")
+            CustomMessageBox.show_warning(self, "Warning", "Pascode must be at least 4 digits long!")
             return
         self.pin = pin
         self.accept()

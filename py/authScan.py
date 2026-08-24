@@ -7,6 +7,7 @@ from PyQt5.uic import loadUi
 from camera import start_access_capture
 from serial_handler import SerialHandler
 from log_client import send_log
+from screens.custom_dialog import CustomMessageBox
 
 
 # --- CLASS AUTH FINGER ---
@@ -14,19 +15,17 @@ class AuthFinger(QDialog):
     go_back = pyqtSignal()
     success = pyqtSignal()
 
-    def __init__(self, serial_handler=None, gudang="GLOCK17"):
-        super().__init__()
+    def __init__(self, parent=None, serial_handler=None, gudang="GLOCK17"):
+        super().__init__(parent)
         loadUi("ui/auth_finger.ui", self)
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowFlags(
+                    Qt.Window
+                    | Qt.FramelessWindowHint
+                    | Qt.WindowStaysOnTopHint
+                    | Qt.CustomizeWindowHint
+                )
         self.setWindowModality(Qt.ApplicationModal)
-        self.setStyleSheet(self.styleSheet() + """
-            * {
-                outline: none;
-            }
-            QLineEdit {
-                border: none !important;
-            }
-        """)
+        self.center_dialog()
 
         self.btCls_finger.clicked.connect(self.stop_and_close)
 
@@ -49,6 +48,20 @@ class AuthFinger(QDialog):
             self.serial.send_command_to(self.target_role, "v")
             self.serial.send_command_to(self.target_role, "beep")
             print(f"Perintah 'v & beep' dikirim ke {self.target_role}")
+
+    def center_dialog(self):
+            """Memaksa posisi dialog berada di tengah-tengah MainApp/Screen."""
+            if self.parent():
+                # Jika ada parent (MainApp), posisikan tepat di tengah MainApp
+                parent_rect = self.parent().geometry()
+                geo = self.geometry()
+                x = parent_rect.x() + (parent_rect.width() - geo.width()) // 2
+                y = parent_rect.y() + (parent_rect.height() - geo.height()) // 2
+                self.move(x, y)
+            else:
+                # Fallback ke tengah layar kiosk 1024x600 jika parent belum siap
+                from utils import center_on_screen
+                center_on_screen(self)
 
     def handle_serial_data(self, role, tag, value):
         if role != self.target_role or tag not in ("FP", "FINGER"):
@@ -167,11 +180,17 @@ class AuthRFID(QDialog):
     SCAN_TIMEOUT_MS = 10000
     MAX_ATTEMPTS = 3
 
-    def __init__(self, serial_handler=None, gudang="GLOCK17"):
-        super().__init__()
+    def __init__(self, parent=None, serial_handler=None, gudang="GLOCK17"):
+        super().__init__(parent)
         loadUi("ui/auth_rfid.ui", self)
+        self.setWindowFlags(
+                    Qt.Window
+                    | Qt.FramelessWindowHint
+                    | Qt.WindowStaysOnTopHint
+                    | Qt.CustomizeWindowHint
+                )
         self.setWindowModality(Qt.ApplicationModal)
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.center_dialog()
 
         self.btCls_rfid.clicked.connect(self.stop_and_close)
 
@@ -198,6 +217,20 @@ class AuthRFID(QDialog):
         if self.serial:
             self.serial.send_command_to(self.target_role, "beep")
             self.start_scan_attempt()
+
+    def center_dialog(self):
+            """Memaksa posisi dialog berada di tengah-tengah MainApp/Screen."""
+            if self.parent():
+                # Jika ada parent (MainApp), posisikan tepat di tengah MainApp
+                parent_rect = self.parent().geometry()
+                geo = self.geometry()
+                x = parent_rect.x() + (parent_rect.width() - geo.width()) // 2
+                y = parent_rect.y() + (parent_rect.height() - geo.height()) // 2
+                self.move(x, y)
+            else:
+                # Fallback ke tengah layar kiosk 1024x600 jika parent belum siap
+                from utils import center_on_screen
+                center_on_screen(self)
 
     def start_scan_attempt(self):
         self.scan_attempts += 1
@@ -330,19 +363,18 @@ class AuthPin(QDialog):
     go_back = pyqtSignal()
     submitSuccess = pyqtSignal()
 
-    def __init__(self, serial_handler=None, gudang="GLOCK17"):
-        super().__init__()
+    def __init__(self, parent=None, serial_handler=None, gudang="GLOCK17"):
+        super().__init__(parent)
         loadUi("ui/auth_pin2.ui", self)
-        self.setStyleSheet(self.styleSheet() + """
-            * {
-                outline: none;
-            }
-            QLineEdit {
-                border: none !important;
-            }
-        """)
-        self.setWindowModality(Qt.ApplicationModal)
-        self.setWindowFlags(Qt.FramelessWindowHint)
+
+        self.setWindowFlags(
+            Qt.Window
+            | Qt.FramelessWindowHint
+            | Qt.WindowStaysOnTopHint
+            | Qt.CustomizeWindowHint
+        )
+        self.setWindowModality(Qt.ApplicationModal)       
+        self.center_dialog()
 
         self.btCls_pin2.clicked.connect(self.reject)
         self.btSubmit.clicked.connect(self.checkPin)
@@ -370,6 +402,20 @@ class AuthPin(QDialog):
 
         if self.serial:
             self.serial.send_command_to(self.target_role, "beep")
+
+    def center_dialog(self):
+        """Memaksa posisi dialog berada di tengah-tengah MainApp/Screen."""
+        if self.parent():
+            # Jika ada parent (MainApp), posisikan tepat di tengah MainApp
+            parent_rect = self.parent().geometry()
+            geo = self.geometry()
+            x = parent_rect.x() + (parent_rect.width() - geo.width()) // 2
+            y = parent_rect.y() + (parent_rect.height() - geo.height()) // 2
+            self.move(x, y)
+        else:
+            # Fallback ke tengah layar kiosk 1024x600 jika parent belum siap
+            from utils import center_on_screen
+            center_on_screen(self)
 
     # --- HANDLE VIRTUAL KEYBOARD ---
     def eventFilter(self, obj, event):
@@ -417,8 +463,9 @@ class AuthPin(QDialog):
     def show_error_dialog(self, message="WRONG PIN!"):
         # PENTING: Tutup keyboard sebelum membuka dialog error
         self.close_virtual_keyboard()
-        msg = DbMessage(title="Error", message=message, success=False)
-        msg.exec_()
+        CustomMessageBox.show_warning(self, "Error", message)                   
+        # msg = DbMessage(title="Error", message=message, success=False, parent=self)
+        # msg.exec_()
         self.lbPin.clear()
 
     def checkPin(self):

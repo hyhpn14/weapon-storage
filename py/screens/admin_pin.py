@@ -5,11 +5,17 @@ from utils import center_on_screen
 
 class AdminPinDialog(QDialog):
     def __init__(self, parent=None, instruction="Masukkan PIN Super Admin:"):
-        super().__init__()   # <-- TIDAK diteruskan parent-nya ke QDialog, hindari konflik render
+        super().__init__(parent)   # <-- TIDAK diteruskan parent-nya ke QDialog, hindari konflik render
         loadUi("ui2/dialogs/admin_pin.ui", self)
-        self.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
+        # Tambahkan WindowStaysOnTopHint & Window
+        self.setWindowFlags(
+            Qt.Window
+            | Qt.FramelessWindowHint
+            | Qt.WindowStaysOnTopHint
+            | Qt.CustomizeWindowHint
+        )
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setWindowModality(Qt.ApplicationModal)   # tetap modal, mengunci layar di belakang
+        self.setWindowModality(Qt.ApplicationModal)
 
         self.input_pin = ""
 

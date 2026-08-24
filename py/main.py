@@ -15,6 +15,7 @@ from screens import Home, Login, Register, Saver
 from serial_handler import SerialHandler
 from utils import ClockHelper, SystemStatusHelper, center_on_screen
 from log_client import send_log
+from notifier import send_forced_open_alert_async, push_dashboard_warning_async
 
 
 def load_gudang_config():
@@ -65,6 +66,7 @@ class MainApp(QMainWindow):
         self.clock_helper = ClockHelper()
         self.status_helper = SystemStatusHelper()
         self.history = []
+        self.last_known_weight = {}
 
         # FLAG GERBANG LOGIN: locker data HANYA boleh diproses kalau True.
         # Diset True saat login sukses, direset False saat logout.
@@ -170,30 +172,87 @@ class MainApp(QMainWindow):
             print(f"Gagal memanggil taskbar: {e}")
 
     def handle_data(self, role, tag, value):
-        """
-        SATU-SATUNYA gerbang routing data serial di seluruh aplikasi.
-        Semua screen/dialog yang butuh data serial (Home, AuthFinger,
-        AuthRFID, AuthPin) WAJIB menerima data lewat jalur ini -> lewat
-        active_screen.handle_serial_data(). JANGAN ada widget yang connect
-        langsung ke thread.internal_data_received, supaya gerbang login di
-        bawah ini tidak bisa dilewati/di-bypass.
-        """
-        active_screen = self.stack.currentWidget()
+      """SATU-SATUNYA gerbang routing data serial di seluruh aplikasi."""
+      active_screen = self.stack.currentWidget()
 
-        # ISOLASI DATA LOCKER: locker HANYA diproses kalau (1) user sudah
-        # login DAN (2) layar Home yang sedang aktif. Kalau salah satu
-        # syarat tidak terpenuhi, data locker langsung dibuang -> tidak
-        # akan pernah "nyasar" tampil di layar Login/Saver/Register.
-        if tag == "LOCKER":
-            if self.is_authenticated and active_screen == self.screens["home"]:
-                self.screens["home"].handle_serial_data(role, tag, value)
-            return
+      # ISOLASI DATA LOCKER
+      if tag == "LOCKER":
+        # Kondisi 1: User sudah login DAN ada di Layar Home (Akses Sah)
+        if self.is_authenticated and active_screen == self.screens["home"]:
+          self.screens["home"].handle_serial_data(role, tag, value)
+          # Update baseline berat dari data sah
+          return
 
-        # Data non-LOCKER (mis. RFID/FINGER/PIN untuk proses login) tetap
-        # diteruskan ke layar aktif yang punya handler, TIDAK digerbang
-        # oleh is_authenticated karena data ini justru dipakai UNTUK login.
-        if hasattr(active_screen, "handle_serial_data"):
-            active_screen.handle_serial_data(role, tag, value)
+        # Kondisi 2: Belum Login / Belum di Home tapi Loker Diintervensi
+        raw = value.strip()
+        if raw:
+          parts = [p.strip() for p in raw.split(",") if p.strip() != ""]
+
+          for i in range(0, len(parts), 5):
+            if i + 3 < len(parts):
+              locker_id = parts[i]
+              berat = parts[i + 1]
+              limit_switch = (
+                  int(parts[i + 3]) if parts[i + 3].isdigit() else 0
+              )
+
+              # Ambil berat sebelumnya (jika ada)
+              prev_berat = self.last_known_weight.get(locker_id, None)
+
+              # Cek indikator kecurangan/pencurian:
+              # 1. Pintu dibuka (limit_switch == 1)
+              # 2. Berat berubah dari terisi (A/B) menjadi lebih ringan/kosong (C) sebelum pintu terbuka
+              is_weight_removed = (
+                  prev_berat in ["A", "B"] and berat not in ["A", "B"]
+              )
+              is_door_opened = limit_switch == 1
+
+              if is_door_opened or is_weight_removed:
+                print(
+                    f"⚠️ AKSES ILEGAL! Loker {locker_id} disentuh/dibuka paksa"
+                    f" tanpa login! (Berat: {prev_berat}->{berat}, Limit:"
+                    f" {limit_switch})"
+                )
+
+                # Kirim sinyal BEEPFAIL ke Arduino
+                self.serial_handler.send_command_to(role, "beepfail")
+
+                # Catat log keamanan
+                send_log(
+                    kategori="user_auth",
+                    aktivitas="force_open",
+                    gudang=GUDANG,
+                    locker_id=locker_id,
+                    detail=(
+                        f"Pengambilan paksa loker {locker_id}! (Weight:"
+                        f" {prev_berat}->{berat}, Limit: {limit_switch})"
+                    ),
+                    metode="hardware_sensor",
+                    status="danger",
+                )
+                # Kirim notifikasi email peringatan pembukaan paksa
+                send_forced_open_alert_async(
+                    gudang=GUDANG,
+                    locker_id=locker_id,
+                    role=role,
+                    prev_berat=prev_berat,
+                    berat=berat,
+                    limit_switch=limit_switch
+                )
+                push_dashboard_warning_async(
+                    gudang="Gudang Utama",
+                    auth_type="HARDWARE_TAMPER",
+                    reason=f"Pembukaan paksa loker {locker_id}",
+                )
+                break
+
+              # Simpan status berat saat ini
+              self.last_known_weight[locker_id] = berat
+        return
+
+      # Data non-LOCKER (RFID/FINGER/PIN) tetap diproses biasa
+      if hasattr(active_screen, "handle_serial_data"):
+        active_screen.handle_serial_data(role, tag, value)
 
     def attach_and_connect_status_badges(self):
         """Memasang PulsingStatusBadge di tiap layar dan menyambungkannya ke status_helper."""

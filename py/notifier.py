@@ -90,7 +90,61 @@ def send_email_alert_async(gudang, auth_type, reason):
   # Jalankan di Thread terpisah agar GUI PyQt tidak macet
   threading.Thread(target=_send, daemon=True).start()
 
+# Tambahkan fungsi ini di notifier.py
 
+
+def send_forced_open_alert_async(
+    gudang, locker_id, role, prev_berat, berat, limit_switch
+):
+  """Mengirim email peringatan khusus PEMBUKAAN PAKSA LOKER ke semua Admin."""
+
+  def _send():
+    try:
+      admin_emails = get_admin_emails()
+      if not admin_emails:
+        print("⚠️ Tidak ada email admin terdaftar.")
+        return
+
+      subject = (
+          f"🚨 CRITICAL ALERT: Pembukaan Paksa Loker {locker_id} [{gudang}]"
+      )
+      body = f"""
+            <h2 style="color: red;">⚠️ PERINGATAN KEAMANAN CRITICAL</h2>
+            <p>Sistem mendeteksi <b>PEMBUKAAN PAKSA / PENYUSUPAN</b> tanpa otentikasi login!</p>
+            <ul>
+                <li><b>Gudang / Storage:</b> {gudang}</li>
+                <li><b>ID Loker:</b> {locker_id}</li>
+                <li><b>Controller Role:</b> {role}</li>
+                <li><b>Status Limit Switch:</b> {limit_switch} (1 = Terbuka Paksa)</li>
+                <li><b>Status Berat Senjata:</b> Sebelum ({prev_berat}) &rarr; Sesudah ({berat})</li>
+            </ul>
+            <p>Sistem telah membunyikan alarm keras <b>(BEEPFAIL)</b> pada hardware.</p>
+            <p><i>Harap segera periksa lokasi fisik loker!</i></p>
+            """
+
+      server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+      server.starttls()
+      server.login(SENDER_EMAIL, SENDER_PASSWORD)
+
+      for recipient in admin_emails:
+        try:
+          msg = MIMEMultipart("alternative")
+          msg["Subject"] = subject
+          msg["From"] = f"Loker Security System <{SENDER_EMAIL}>"
+          msg["To"] = recipient
+          msg.attach(MIMEText(body, "html"))
+
+          server.sendmail(SENDER_EMAIL, recipient, msg.as_string())
+          print(f"📧 Alert pembukaan paksa terkirim ke: {recipient}")
+        except Exception as err:
+          print(f"❌ Gagal kirim email ke {recipient}: {err}")
+
+      server.quit()
+    except Exception as global_err:
+      print(f"❌ SMTP Error: {global_err}")
+
+  threading.Thread(target=_send, daemon=True).start()
+  
 def push_dashboard_warning_async(gudang, auth_type, reason):
     """Mengirim Notifikasi Warning ke Web Dashboard (Webhooks + Database Notification)."""
 

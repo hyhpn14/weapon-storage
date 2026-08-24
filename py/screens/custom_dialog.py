@@ -1,23 +1,30 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QDialog, QWidget
 from PyQt5.uic import loadUi
-from utils import center_on_screen
 
 
 class CustomMessageBox(QDialog):
-  # Enum / Konstanta Tipe Pesan
   INFO = "INFO"
   WARNING = "WARNING"
   CONFIRM = "CONFIRM"
 
-  def __init__(self, parent=None, title="Pemberitahuan", message="", msg_type=INFO):
-    super().__init__()  # Tanpa parent untuk menghindari issue render/clipping
+  def __init__(
+      self, parent=None, title="Pemberitahuan", message="", msg_type=INFO
+  ):
+    # Pass parent wajib ada
+    super().__init__(parent)
     loadUi("ui2/dialogs/custom_msg.ui", self)
 
-    self.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
+    # BUAT SEBAGAI WIDGET EMBEDDED (TANPA WINDOW OS BARU)
+    if parent:
+      self.setWindowFlags(Qt.Widget | Qt.FramelessWindowHint)
+    else:
+      self.setWindowFlags(
+          Qt.Dialog | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+      )
+
     self.setAttribute(Qt.WA_TranslucentBackground)
-    self.setWindowModality(Qt.ApplicationModal)
 
     # Set Teks
     if hasattr(self, "lbTitle"):
@@ -25,7 +32,7 @@ class CustomMessageBox(QDialog):
     if hasattr(self, "lbMessage"):
       self.lbMessage.setText(message)
 
-    # Binding Tombol Dialog & Close Button (X)
+    # Binding Tombol (Gunakan close/accept/reject biasa)
     if hasattr(self, "btnOk"):
       self.btnOk.clicked.connect(self.accept)
     if hasattr(self, "btnCancel"):
@@ -33,12 +40,24 @@ class CustomMessageBox(QDialog):
     if hasattr(self, "btn_close"):
       self.btn_close.clicked.connect(self.reject)
 
-    # Konfigurasi Tampilan Berdasarkan Tipe
     self.setup_type(msg_type)
 
   def showEvent(self, event):
-    center_on_screen(self)
     super().showEvent(event)
+    self.resize_and_center()
+    self.raise_()
+
+  def resize_and_center(self):
+    """Menempatkan dialog tepat di tengah-tengah parent widget."""
+    if self.parent():
+      parent_rect = self.parent().rect()
+      self.adjustSize()  # Sesuaikan ukuran UI
+      geo = self.geometry()
+
+      # Hitung koordinat lokal di dalam AuthPin
+      x = (parent_rect.width() - geo.width()) // 2
+      y = (parent_rect.height() - geo.height()) // 2
+      self.move(x, y)
 
   def setup_type(self, msg_type):
     if msg_type == self.INFO:
@@ -48,6 +67,9 @@ class CustomMessageBox(QDialog):
         self.btnOk.setText("OK")
       if hasattr(self, "lbIcon"):
         self.lbIcon.setPixmap(QPixmap("assets/icon/critical.svg"))
+        self.lbIcon.setStyleSheet(
+            "background-color: #ffc107; border-radius: 25px;"
+        )
 
     elif msg_type == self.WARNING:
       if hasattr(self, "btnCancel"):
@@ -57,6 +79,9 @@ class CustomMessageBox(QDialog):
       if hasattr(self, "lbIcon"):
         self.lbIcon.setPixmap(
             QPixmap("assets/icon/triangle-exclamation-solid-full.svg")
+        )
+        self.lbIcon.setStyleSheet(
+            "background-color: #dc3545; border-radius: 25px;"
         )
 
     elif msg_type == self.CONFIRM:
@@ -68,27 +93,49 @@ class CustomMessageBox(QDialog):
         self.btnCancel.setText("Batal")
       if hasattr(self, "lbIcon"):
         self.lbIcon.setPixmap(QPixmap("ui2/assets/icon_question.png"))
-
+        self.lbIcon.setStyleSheet(
+            "background-color: #0d6efd; border-radius: 25px;"
+        )
   # --- HELPER STATIC METHODS ---
 
   @staticmethod
-  def show_info(parent, title, message):
+  def _show_overlay(parent, title, message, msg_type):
     dialog = CustomMessageBox(
-        parent, title, message, msg_type=CustomMessageBox.INFO
+        parent, title, message, msg_type=msg_type
     )
-    return dialog.exec_()
+
+    # Tampilkan overlay
+    dialog.show()
+    dialog.raise_()
+
+    # Buat Event Loop lokal pengganti exec_() agar tombol berfungsi lancar
+    from PyQt5.QtCore import QEventLoop
+
+    loop = QEventLoop()
+    dialog.finished.connect(loop.quit)
+    loop.exec_()
+
+    res = dialog.result()
+    dialog.deleteLater()  # Bersihkan memori setelah ditutup
+    return res
+
+  @staticmethod
+  def show_info(parent, title, message):
+    res = CustomMessageBox._show_overlay(
+        parent, title, message, CustomMessageBox.INFO
+    )
+    return res == QDialog.Accepted
 
   @staticmethod
   def show_warning(parent, title, message):
-    dialog = CustomMessageBox(
-        parent, title, message, msg_type=CustomMessageBox.WARNING
+    res = CustomMessageBox._show_overlay(
+        parent, title, message, CustomMessageBox.WARNING
     )
-    return dialog.exec_()
+    return res == QDialog.Accepted
 
   @staticmethod
   def show_confirm(parent, title, message):
-    """Mengembalikan True jika user klik 'Ya', dan False jika 'Batal'."""
-    dialog = CustomMessageBox(
-        parent, title, message, msg_type=CustomMessageBox.CONFIRM
+    res = CustomMessageBox._show_overlay(
+        parent, title, message, CustomMessageBox.CONFIRM
     )
-    return dialog.exec_() == QDialog.Accepted
+    return res == QDialog.Accepted
