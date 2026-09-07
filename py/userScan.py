@@ -7,6 +7,7 @@ from serial_handler import SerialHandler
 from log_client import send_log
 from db_config import get_db_connection
 from screens.custom_dialog import CustomMessageBox
+from utils import center_on_screen
 
 # Mapping keyword dari Arduino -> teks UI yang rapi
 FINGER_STATUS_MAP = {
@@ -67,6 +68,20 @@ class ScanFinger(QDialog):
         # Trigger pendaftaran ke Target Controller
         if self.serial and self.target_id is not None:
             self.serial.send_command_to(self.target_role, f"e{self.target_id}")
+
+    def center_dialog(self):
+        """Memaksa posisi dialog berada di tengah-tengah MainApp/Screen."""
+        if self.parent():
+            # Jika ada parent (MainApp), posisikan tepat di tengah MainApp
+            parent_rect = self.parent().geometry()
+            geo = self.geometry()
+            x = parent_rect.x() + (parent_rect.width() - geo.width()) // 2
+            y = parent_rect.y() + (parent_rect.height() - geo.height()) // 2
+            self.move(x, y)
+        else:
+            # Fallback ke tengah layar kiosk 1024x600 jika parent belum siap
+            from utils import center_on_screen
+            center_on_screen(self)
 
     def stop_scanning(self):
         if self.serial:
@@ -184,6 +199,20 @@ class ScanRfid(QDialog):
 
         if self.serial:
             self.serial.send_command_to(self.target_role, "r")
+
+    def center_dialog(self):
+        """Memaksa posisi dialog berada di tengah-tengah MainApp/Screen."""
+        if self.parent():
+            # Jika ada parent (MainApp), posisikan tepat di tengah MainApp
+            parent_rect = self.parent().geometry()
+            geo = self.geometry()
+            x = parent_rect.x() + (parent_rect.width() - geo.width()) // 2
+            y = parent_rect.y() + (parent_rect.height() - geo.height()) // 2
+            self.move(x, y)
+        else:
+            # Fallback ke tengah layar kiosk 1024x600 jika parent belum siap
+            from utils import center_on_screen
+            center_on_screen(self)
 
     def stop_scanning(self):
         if self.serial:
@@ -315,6 +344,20 @@ class ScanPin(QDialog):
         self.buttonBox.accepted.connect(self.save_data)
         self.buttonBox.rejected.connect(self.reset_form)
         self.btn_close.clicked.connect(self.reject)
+
+    def center_dialog(self):
+        """Memaksa posisi dialog berada di tengah-tengah MainApp/Screen."""
+        if self.parent():
+            # Jika ada parent (MainApp), posisikan tepat di tengah MainApp
+            parent_rect = self.parent().geometry()
+            geo = self.geometry()
+            x = parent_rect.x() + (parent_rect.width() - geo.width()) // 2
+            y = parent_rect.y() + (parent_rect.height() - geo.height()) // 2
+            self.move(x, y)
+        else:
+            # Fallback ke tengah layar kiosk 1024x600 jika parent belum siap
+            from utils import center_on_screen
+            center_on_screen(self)
 
     def save_data(self):
         pin = self.lbPinR.text()

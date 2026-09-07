@@ -79,8 +79,8 @@ QLineEdit:focus {
 }
 
 QComboBox {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 10px;
     padding: 8px 12px;
     color: #ffffff;
@@ -89,13 +89,17 @@ QComboBox {
     min-height: 32px;
 }
 
-QComboBox:focus {
-    border: 1px solid #FFF701;
+QComboBox:focus, QComboBox:on {
+    background-color: #000000;
+    color: #ffffff;
+    border: 2px solid #FFF701;
+    outline: none;
 }
 
 QComboBox::drop-down {
     border: none;
     width: 28px;
+    background: transparent;
 }
 
 QComboBox::down-arrow {
@@ -104,12 +108,29 @@ QComboBox::down-arrow {
     height: 12px;
 }
 
+/* Popup container */
 QComboBox QAbstractItemView {
-    background-color: #0d1a30;
-    color: white;
-    selection-background-color: #0248c1;
-    selection-color: white;
-    border: 1px solid rgba(255,255,255,0.08);
+    background-color: #000000;
+    color: #ffffff;   
+    outline: none;
+}
+
+/* WAJIB — ini yang hilang, penyebab row kosong jadi putih di foto kamu */
+QComboBox QAbstractItemView::item {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 6px 12px;
+    min-height: 28px;
+}
+
+QComboBox QAbstractItemView::item:selected {
+    background-color: #0248c1;
+    color: #ffffff;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background-color: #0248c1;
+    color: #ffffff;
 }
 
 QPushButton#btReset, QPushButton#btBack {

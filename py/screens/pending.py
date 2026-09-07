@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QEventLoop
 from PyQt5.uic import loadUi
 from db_config import get_db_connection
 from .custom_dialog import CustomMessageBox
@@ -14,9 +14,8 @@ class PendingDialog(QDialog):
         loadUi("ui2/dialogs/pending_dialog.ui", self)
        # Ubah flags agar dipaksa paling depan
         self.setWindowFlags(
-            Qt.Window
-            | Qt.FramelessWindowHint
-            | Qt.WindowStaysOnTopHint
+            Qt.Dialog
+            | Qt.FramelessWindowHint           
             | Qt.CustomizeWindowHint
         )
         self.setWindowModality(Qt.ApplicationModal)
@@ -68,8 +67,9 @@ class PendingDialog(QDialog):
         pin, ok = AdminPinDialog.get_pin(self, instruction=instruction_text)
         
         if not ok or not pin:
-            return  # User membatalkan input
+            return  # User membatalkan input        
 
+        # --- Sisa Logika Verifikasi PIN & ACC (Sama seperti sebelumnya) ---
         if self.verify_super_admin_pin(pin):
             self.approved_data = row_data
             start_access_capture(self, reason="success_acc_enroll", save_dir=f"captures/{self.gudang}")  
@@ -110,9 +110,10 @@ class PendingDialog(QDialog):
             except Exception as e:
                 print(f"Error trigger security alert PIN Super Admin: {e}")
 
-                CustomMessageBox.show_warning(
-                    self, "Akses Ditolak", "PIN Super Admin salah! Akses ditolak."
-                )
+            CustomMessageBox.show_warning(
+                self, "Akses Ditolak", "PIN Super Admin salah! Akses ditolak."
+            )
+
     def verify_super_admin_pin(self, input_pin):
         try:
             conn = get_db_connection()

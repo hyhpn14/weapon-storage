@@ -186,17 +186,29 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
      <number>40</number>
     </property>
     <item>
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
+     <widget class="QFrame" name="frame_4">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
       </property>
-     </spacer>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item alignment="Qt::AlignRight">
+        <widget class="QPushButton" name="bt_hide">
+         <property name="styleSheet">
+          <string notr="true">QPushButton#btn_hide {
+    background-color: transparent;
+    border: none;
+}</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </item>
     <item alignment="Qt::AlignHCenter">
      <widget class="QFrame" name="frame">

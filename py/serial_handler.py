@@ -212,6 +212,9 @@ class SerialHandler:
         'arduino', 'ch340', 'usb serial', 'usb-serial', 'usb', 'ftdi', 'cp210'
     )
 
+    # data_received = pyqtSignal(str, str, str)
+
+
     def __init__(self, baudrate=115200, gudang="GLOCK17"):
         self.baudrate = baudrate
         self.gudang = gudang

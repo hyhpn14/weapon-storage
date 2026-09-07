@@ -6,6 +6,8 @@ import geocoder
 import requests, socket
 from pulsing_widget import PulsingStatusBadge
 from db_config import get_db_connection
+from screens.admin_pin import AdminPinDialog
+from screens.custom_dialog import CustomMessageBox
 
 
 DEVICE_PROFILES = {
@@ -31,6 +33,7 @@ class Saver(QMainWindow):
         # Update jam dari helper pusat
         clock_helper.time_updated.connect(self.update_ui)
         self.btDown.clicked.connect(self.go_to_login.emit)
+        self.bt_hide.clicked.connect(self.close_app)
 
         # Connection event tombol btLamp (jika widget ada di .ui)
         if hasattr(self, "btLamp"):
@@ -196,3 +199,52 @@ class Saver(QMainWindow):
         # Optional: print ke console biar tau udah jalan
         if temp and hum:
             print(f"✅ Weather updated: {temp}°C, {hum}% RH")
+
+    def close_app(self):
+        """Menangani klik hidden button dengan proteksi PIN Admin"""
+        instruction_text = "Masukkan PIN Super Admin untuk menutup aplikasi:"
+        pin, ok = AdminPinDialog.get_pin(self, instruction=instruction_text)
+        
+        # Jika user menekan Cancel atau PIN kosong
+        if not ok or not pin:
+            return
+
+        # Verifikasi PIN menggunakan fungsi yang sama/mirip dengan PendingDialog
+        if self.verify_super_admin_pin(pin):
+            # Lakukan pembersihan resource jika perlu (stop serial/timer)
+            if hasattr(self, 'serial_thread'):
+                self.serial_thread.stop()
+
+            QApplication.quit()
+        else:
+            CustomMessageBox.show_warning(self, "Akses Ditolak", "PIN Admin salah! Aplikasi tidak dapat ditutup.")
+
+    def verify_super_admin_pin(self, input_pin):
+        """Fungsi pengecekan PIN ke Database"""
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
+            
+            query = "SELECT nrp FROM tb_users WHERE pin = %s AND status = 'ADMIN' LIMIT 1"
+            cursor.execute(query, (input_pin,))
+            result = cursor.fetchone()
+            
+            cursor.close()
+            conn.close()
+            
+            return result is not None
+        except Exception as e:
+            print(f"Error verifikasi PIN: {e}")
+            return input_pin == "123456"  # Fallback PIN jika DB error
+
+    def closeEvent(self, event):
+        """Override tombol close bawaan OS / Alt+F4"""
+        instruction_text = "Konfirmasi PIN Admin untuk keluar dari aplikasi:"
+        pin, ok = AdminPinDialog.get_pin(self, instruction=instruction_text)
+        
+        if ok and pin and self.verify_super_admin_pin(pin):
+            event.accept()  # Izinkan penutupan
+        else:
+            event.ignore()  # Batalkan perintah close
+            if ok: # Jika user memasukkan PIN tapi salah
+                CustomMessageBox.show_warning(self, "Akses Ditolak", "PIN Admin salah!")

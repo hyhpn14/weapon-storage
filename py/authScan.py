@@ -19,11 +19,11 @@ class AuthFinger(QDialog):
         super().__init__(parent)
         loadUi("ui/auth_finger.ui", self)
         self.setWindowFlags(
-                    Qt.Window
-                    | Qt.FramelessWindowHint
-                    | Qt.WindowStaysOnTopHint
-                    | Qt.CustomizeWindowHint
-                )
+            Qt.Window
+            | Qt.FramelessWindowHint
+            | Qt.WindowStaysOnTopHint
+            | Qt.CustomizeWindowHint
+        )
         self.setWindowModality(Qt.ApplicationModal)
         self.center_dialog()
 
@@ -47,6 +47,7 @@ class AuthFinger(QDialog):
         if self.serial:
             self.serial.send_command_to(self.target_role, "v")
             self.serial.send_command_to(self.target_role, "beep")
+            # self.serial.data_received.connect(self.handle_serial_data)
             print(f"Perintah 'v & beep' dikirim ke {self.target_role}")
 
     def center_dialog(self):
@@ -64,6 +65,7 @@ class AuthFinger(QDialog):
                 center_on_screen(self)
 
     def handle_serial_data(self, role, tag, value):
+        print(f"[DEBUG] role diterima='{role}' | target_role='{self.target_role}' | tag='{tag}'")
         if role != self.target_role or tag not in ("FP", "FINGER"):
             return
 
@@ -168,6 +170,13 @@ class AuthFinger(QDialog):
         self.reject()
 
     def closeEvent(self, event):
+         # Putuskan koneksi saat dialog ditutup
+        if self.serial and hasattr(self.serial, 'data_received'):
+            try:
+                self.serial.data_received.disconnect(self.handle_serial_data)
+            except TypeError:
+                pass  # jika belum terhubung
+
         self.stop_scanning()
         event.accept()
 

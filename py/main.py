@@ -73,7 +73,7 @@ class MainApp(QMainWindow):
         self.is_authenticated = False
 
         # SATU SerialHandler untuk seluruh aplikasi
-        self.serial_handler = SerialHandler()
+        self.serial_handler = SerialHandler(gudang=GUDANG)
 
         # PENTING: self.screens harus SUDAH ada sebelum serial_handler.start()
         # dipanggil, karena begitu port kebuka, thread bisa langsung emit
@@ -394,6 +394,7 @@ class MainApp(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
     window = MainApp()
     window.show()
     sys.exit(app.exec_())

@@ -1,3 +1,4 @@
+import subprocess
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.uic import loadUi
@@ -41,18 +42,6 @@ DEFAULT_STYLE = """
     }
 """
 
-# --- HELPER UNTUK MEMILIH ARDUINO TARGET ---
-def get_target_role(serial_handler, fallback="MAIN_CONTROLLER"):
-    """
-    Mencari role Arduino yang sedang aktif/terhubung.
-    Jika ada thread terhubung, gunakan role thread tersebut.
-    """
-    if serial_handler and hasattr(serial_handler, 'threads'):
-        for thread in serial_handler.threads:
-            if getattr(thread, 'is_connected', False) and getattr(thread, 'role', 'UNKNOWN') != 'UNKNOWN':
-                return thread.role
-    return fallback
-
 class Register(QMainWindow):
     go_back = pyqtSignal()
     goto_Regfinger = pyqtSignal()
@@ -64,15 +53,66 @@ class Register(QMainWindow):
         super().__init__()
         loadUi("ui2/registerr.ui", self)
 
+        combo_style = """
+            QListView {
+                background-color: #000000;
+                color: #ffffff;
+                border: 1px solid #FFF701;
+                outline: 0;
+            }
+            QListView::item {
+                min-height: 28px;
+                padding: 6px 12px;
+            }
+            QListView::item:selected {
+                background-color: #0248c1;
+                color: #ffffff;
+            }
+            QListView::item:hover {
+                background-color: #0248c1;
+                color: #ffffff;
+            }
+        """
+        combo_focus_style = """
+        QComboBox {
+            combobox-popup: 0;
+            background-color: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 8px 12px;
+            color: #ffffff;
+            font-family: Inter;
+            font-size: 13px;
+            min-height: 32px;
+        }
+        QComboBox:focus, QComboBox:on {
+            border: 2px solid #FFF701;
+        }
+        """
+
+        for combo in (self.cbState, self.cbStorage):
+            combo.setStyleSheet(combo_focus_style)
+            combo.view().setFrameShape(QFrame.NoFrame)
+            combo.view().setStyleSheet(combo_style)  # yang sudah ada sebelumnyaombo.view().setStyleSheet(combo_style)
+
         self.gudang = gudang   # Simpan untuk dipakai di semua method
         self.serial = serial_handler
-        self.target_role = get_target_role(self.serial, fallback="MAIN_CONTROLLER")
+
+        if self.serial and hasattr(self.serial, 'get_main_role_for_gudang'):
+            self.target_role = self.serial.get_main_role_for_gudang()
+        else:
+            self.target_role = "MAIN_CONTROLLER"
+
+        # Referensi dialog scan yang sedang aktif (sama seperti Login.active_auth_dialog)
+        self.active_scan_dialog = None
 
         # Tempat simpan data sementara & ID pending
         self.selected_user_id = None
         self.finger_id = None
         self.rfid_uid = None
         self.pin = None
+
+        self.keyboard_process = None
 
         # Bind event tombol dasar
         self.btCls_regis.clicked.connect(self.handle_close)
@@ -85,12 +125,17 @@ class Register(QMainWindow):
         self.btRSPin.clicked.connect(self.regis_pin)
         self.btConfirm.clicked.connect(self.confirm_registration)
 
+        # Pass event filter ke semua QLineEdit yang butuh virtual keyboard
+        self.lbLoker.installEventFilter(self)
+        self.lbName.installEventFilter(self)
+        self.lbTitle.installEventFilter(self)
+        self.lbNRP.installEventFilter(self)
+
         # Setup awal: Kunci seluruh form input
         self.set_form_enabled(False)
 
-        # ============================================================
-        # SETUP TIMER & POLLING DATA PENDING
-        # ============================================================
+    
+        # SETUP TIMER & POLLING DATA PENDING      
         self.update_notif_pending()  # Load notif pertama kali
 
         self.timer_notif = QTimer(self)
@@ -99,6 +144,50 @@ class Register(QMainWindow):
 
         if hasattr(self, 'btNotif'):
             self.btNotif.clicked.connect(self.open_pending_dialog)
+
+    def eventFilter(self, obj, event):
+        # Deteksi saat QLineEdit mendapatkan fokus input
+        if event.type() == QEvent.FocusIn:
+            if obj in (self.lbLoker, self.lbName, self.lbTitle, self.lbNRP):
+                self.open_default_keyboard()
+                # Kembalikan fokus ke window utama agar OS tidak 'stuck'
+                QTimer.singleShot(100, self.force_to_front)
+        return super().eventFilter(obj, event)
+
+    def force_to_front(self):
+        self.raise_()
+        self.activateWindow()
+
+    def open_default_keyboard(self):
+        """Membuka wvkbd persis seperti di AdminPinDialog"""
+        try:
+            if (
+                self.keyboard_process is None
+                or self.keyboard_process.poll() is not None
+            ):
+                self.keyboard_process = subprocess.Popen(["wvkbd-mobintl", "-H", "380"])
+        except Exception:
+            try:
+                self.keyboard_process = subprocess.Popen(["wvkbd", "-H", "380"])
+            except Exception as e:
+                print(f"Gagal membuka wvkbd: {e}")
+
+    def close_virtual_keyboard(self):
+        """Menutup proses wvkbd"""
+        try:
+            subprocess.Popen(["killall", "wvkbd-mobintl", "wvkbd"])
+            self.keyboard_process = None
+        except Exception as e:
+            print(f"Gagal menutup keyboard: {e}")
+
+    def closeEvent(self, event):
+        # Tutup keyboard saat halaman Register ditutup atau kembali
+        self.close_virtual_keyboard()
+        super().closeEvent(event)
+
+    def handle_serial_data(self, role, tag, value):
+        if self.active_scan_dialog and hasattr(self.active_scan_dialog, "handle_serial_data"):
+            self.active_scan_dialog.handle_serial_data(role, tag, value)
 
     def set_form_enabled(self, state: bool):
         """Mengunci (disable) atau membuka (enable) seluruh QLineEdit, QComboBox, dan Tombol Scan."""
@@ -114,6 +203,9 @@ class Register(QMainWindow):
 
     def open_pending_dialog(self):
         """Membuka dialog pending users dan mengisikan form HANYA jika di-ACC oleh Super Admin"""
+        if hasattr(self, 'timer_notif'):
+            self.timer_notif.stop()
+
         dialog = PendingDialog(self, gudang=self.gudang)
         if dialog.exec_() == QDialog.Accepted and dialog.approved_data:
             data = dialog.approved_data
@@ -131,6 +223,8 @@ class Register(QMainWindow):
             
             # Update counter notifikasi setelah dialog ditutup
             self.update_notif_pending()
+            if hasattr(self, 'timer_notif'):
+                self.timer_notif.start(3000)
 
     # ============================================================
     # CEK DATABASE & UPDATE TEXT BUTTON NOTIFIKASI
@@ -169,39 +263,57 @@ class Register(QMainWindow):
             return self.lbNRP.text() if hasattr(self.lbNRP, 'text') else self.lbNRP.toPlainText()
         return ""
 
-    def regis_finger(self):
-        nrp = self.get_nrp_value()
-        if not nrp:
-            self.show_message("Peringatan", "Pilih data user di tombol Pending terlebih dahulu!", success=False)
-            return
-
-        self.get_next_finger_id() 
-
-        if self.serial:
-            self.serial.send_command_to(self.target_role, 'e')
-            print(f"{self.target_role}e{self.next_id}")
-
-        dialog = ScanFinger(parent=self, nrp=nrp, serial_handler=self.serial, finger_id=self.next_id)
-        if dialog.exec_() == QDialog.Accepted:
-            self.finger_id = self.next_id
-            self.btRSFinger.setStyleSheet(GREEN_STYLE)
-            self.btRSFinger.setEnabled(False)
-
     def regis_rfid(self):
         nrp = self.get_nrp_value()
         if not nrp:
             self.show_message("Peringatan", "Pilih data user di tombol Pending terlebih dahulu!", success=False)
             return
 
-        if self.serial:
-            self.serial.send_command_to(self.target_role, 'r')
-            print("r")
+        # Command 'r' juga tidak dikirim manual di sini lagi — ScanRfid.__init__
+        # sudah mengirimnya sendiri, jadi tidak perlu dikirim dua kali.
 
-        dialog = ScanRfid(parent=self, nrp=nrp, serial_handler=self.serial)
-        if dialog.exec_() == QDialog.Accepted:
-            self.rfid_uid = dialog.current_uid
+        self.active_scan_dialog = ScanRfid(
+            parent=self,
+            nrp=nrp,
+            serial_handler=self.serial,
+        )
+        res = self.active_scan_dialog.exec_()
+
+        if res == QDialog.Accepted:
+            self.rfid_uid = self.active_scan_dialog.current_uid
             self.btRSId.setStyleSheet(GREEN_STYLE)
             self.btRSId.setEnabled(False)
+
+        self.active_scan_dialog = None
+
+    def regis_finger(self):
+        nrp = self.get_nrp_value()
+        if not nrp:
+            self.show_message("Peringatan", "Pilih data user di tombol Pending terlebih dahulu!", success=False)
+            return
+
+        self.get_next_finger_id()
+
+        # Command 'e{id}' TIDAK dikirim manual di sini lagi — ScanFinger.__init__
+        # sudah mengirimnya sendiri dengan format yang benar (f"e{self.target_id}").
+        # Baris send_command_to('e') tanpa ID sebelumnya dihapus karena
+        # ditolak firmware (arg kosong -> toInt() = 0 -> invalid ID).
+
+        self.active_scan_dialog = ScanFinger(
+            parent=self,
+            nrp=nrp,
+            serial_handler=self.serial,
+            finger_id=self.next_id,
+            gudang=self.gudang,
+        )
+        res = self.active_scan_dialog.exec_()
+
+        if res == QDialog.Accepted:
+            self.finger_id = self.next_id
+            self.btRSFinger.setStyleSheet(GREEN_STYLE)
+            self.btRSFinger.setEnabled(False)
+
+        self.active_scan_dialog = None
 
     def regis_pin(self):
         nrp = self.get_nrp_value()

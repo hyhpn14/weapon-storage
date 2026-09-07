@@ -465,6 +465,18 @@ class Home(QMainWindow):
                         btn.is_open_pending = False
                         relay_changed_to_lock = True
 
+                         # Kirim Log Locker Closed
+                        send_log(
+                            kategori="LOCKER",
+                            aktivitas="locker_close",
+                            detail=f"Locker {btn.locker_id} closed",
+                            locker_id=btn.locker_id,
+                            nrp=self.current_nrp,
+                            nama=self.current_nama,
+                            gudang=self.gudang,
+                            metode="sensor"
+                        )
+
                     btn.berat = berat
                     btn.limit_switch = limit_switch
 
